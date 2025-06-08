@@ -3,83 +3,873 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Interactive</title>
+    <title>Lumina Interactive | Cutting-Edge Interactive Art Experiences</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="icon" href="lumina_logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://unpkg.com/@barba/core"></script>
 </head>
 <body>
-    <header>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <div class="page-transition"></div>
+    
+    <header class="header">
         <div class="container">
             <div class="logo">
-                <img src="logo.png" alt="Lumina Interactive Logo">
+                <img src="lumina_logo.png" alt="Lumina Interactive Logo">
             </div>
-            <h1>Lumina Interactive</h1>
-            <nav>
+            <nav class="main-nav">
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="#products">Products</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#hero" class="nav-link">Home</a></li>
+                    <li><a href="#products" class="nav-link">Products</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </header>
-
-    <section class="hero">
+    
+    <div class="mobile-menu">
+        <ul>
+            <li><a href="#hero" class="mobile-nav-link">Home</a></li>
+            <li><a href="#products" class="mobile-nav-link">Products</a></li>
+            <li><a href="#about" class="mobile-nav-link">About</a></li>
+            <li><a href="#testimonials" class="mobile-nav-link">Testimonials</a></li>
+            <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+        </ul>
+        <div class="mobile-social">
+            <a href="https://twitter.com/luminainteractive" target="_blank" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                </svg>
+            </a>
+            <a href="https://instagram.com/luminainteractive" target="_blank" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+            </a>
+            <a href="https://facebook.com/luminainteractive" target="_blank" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                </svg>
+            </a>
+            <a href="https://tiktok.com/@luminainteractive" target="_blank" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 12a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path>
+                    <path d="M15 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path>
+                    <path d="M15 8v8a4 4 0 0 1-4 4"></path>
+                    <line x1="15" y1="4" x2="15" y2="12"></line>
+                </svg>
+            </a>
+        </div>
+    </div>
+    
+    <section id="hero" class="hero">
+        <div class="hero-bg">
+            <div class="hero-particles" id="hero-particles"></div>
+        </div>
         <div class="container">
-            <h2>Interactive Art Experiences</h2>
-            <p>Explore our cutting-edge interactive art concepts</p>
+            <div class="hero-content">
+                <h1 class="hero-title">Interactive Art <span>Experiences</span></h1>
+                <p class="hero-subtitle">Cutting-edge digital art that responds to your unique biometric signature</p>
+                <div class="hero-buttons">
+                    <a href="#products" class="btn primary-btn">Explore Products</a>
+                    <a href="#contact" class="btn secondary-btn">Contact Us</a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <div class="arrow">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </section>
-
+    
     <section id="products" class="products">
         <div class="container">
-            <h2>Our Products</h2>
+            <div class="section-header">
+                <h2 class="section-title">Our Products</h2>
+                <p class="section-subtitle">Explore our innovative interactive art experiences</p>
+            </div>
+            
             <div class="product-grid">
-                <div class="product-card">
-                    <img src="images/neural_resonance_main.png" alt="Neural Resonance Landscapes">
-                    <h3>Neural Resonance Landscapes</h3>
-                    <p>EEG-driven 3D landscape visualization that responds to brainwave patterns</p>
-                    <a href="neural_resonance_landscapes.html" class="btn">Learn More</a>
+                <div class="product-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="product-image">
+                        <img src="neural_resonance_main.png" alt="Neural Resonance Landscapes">
+                        <div class="product-overlay">
+                            <div class="product-overlay-content">
+                                <h4>Neural Resonance</h4>
+                                <p>Transform thoughts into digital landscapes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3>Neural Resonance Landscapes</h3>
+                        <p>Transform your thoughts into immersive digital landscapes with our revolutionary EEG-driven visualization technology</p>
+                        <div class="product-buttons">
+                            <a href="neural_resonance_landscapes.html" class="btn primary-btn">Learn More</a>
+                            <a href="neural_resonance_preview.html" class="btn secondary-btn">Preview</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="product-card">
-                    <img src="images/quantum_particle_main.png" alt="Quantum Particle Symphony">
-                    <h3>Quantum Particle Symphony</h3>
-                    <p>Physics-based particle system with gesture control creating audiovisual compositions</p>
-                    <a href="quantum_particle_symphony.html" class="btn">Learn More</a>
+                
+                <div class="product-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="product-image">
+                        <img src="quantum_particle_main.png" alt="Quantum Particle Symphony">
+                        <div class="product-overlay">
+                            <div class="product-overlay-content">
+                                <h4>Quantum Particle</h4>
+                                <p>Conduct the universe with your fingertips</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3>Quantum Particle Symphony</h3>
+                        <p>Conduct the universe with your fingertips through our advanced physics-based particle system with intuitive gesture control</p>
+                        <div class="product-buttons">
+                            <a href="quantum_particle_symphony.html" class="btn primary-btn">Learn More</a>
+                            <a href="quantum_particle_preview.html" class="btn secondary-btn">Preview</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="product-card">
-                    <img src="images/biometric_identity_main.png" alt="Biometric Identity Portraits">
-                    <h3>Biometric Identity Portraits</h3>
-                    <p>Transform personal biometric data into evolving digital portraits</p>
-                    <<a href="biometric_identity_portraits_fixed.html" class="btn">Learn More</a>
+                
+                <div class="product-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="product-image">
+                        <img src="biometric_identity_main.png" alt="Biometric Identity Portraits">
+                        <div class="product-overlay">
+                            <div class="product-overlay-content">
+                                <h4>Biometric Identity</h4>
+                                <p>Your unique physiological signature as art</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3>Biometric Identity Portraits</h3>
+                        <p>Transform personal biometric data into evolving digital portraits that reflect your unique physiological signature</p>
+                        <div class="product-buttons">
+                            <a href="biometric_identity_portraits_fixed.html" class="btn primary-btn">Learn More</a>
+                            <a href="biometric_identity_preview.html" class="btn secondary-btn">Preview</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="product-card">
-                    <img src="images/spatial_memory_main.png" alt="Spatial Memory Palaces">
-                    <h3>Spatial Memory Palaces</h3>
-                    <p>AR/VR spaces where memories become navigable 3D environments</p>
-                    <<a href="spatial_memory_palaces_fixed.html" class="btn">Learn More</a>
+                
+                <div class="product-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="product-image">
+                        <img src="spatial_memory_main.png" alt="Spatial Memory Palaces">
+                        <div class="product-overlay">
+                            <div class="product-overlay-content">
+                                <h4>Spatial Memory</h4>
+                                <p>Navigate your memories in 3D space</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3>Spatial Memory Palaces</h3>
+                        <p>Create and navigate personalized 3D memory palaces that adapt to your cognitive patterns and spatial reasoning</p>
+                        <div class="product-buttons">
+                            <a href="spatial_memory_palaces_fixed.html" class="btn primary-btn">Learn More</a>
+                            <a href="spatial_memory_preview.html" class="btn secondary-btn">Preview</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="product-card">
-                    <img src="images/collective_consciousness_main.png" alt="Collective Consciousness Canvas">
-                    <h3>Collective Consciousness Canvas</h3>
-                    <p>Multi-user collaborative platform with AI harmonization of creative contributions</p>
-                    <a href="collective_consciousness_canvas.html" class="btn">Learn More</a>
+                
+                <div class="product-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="product-image">
+                        <img src="collective_consciousness_main.png" alt="Collective Consciousness Canvas">
+                        <div class="product-overlay">
+                            <div class="product-overlay-content">
+                                <h4>Collective Consciousness</h4>
+                                <p>Collaborative art across minds</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3>Collective Consciousness Canvas</h3>
+                        <p>Collaborate on living digital artworks that evolve based on the collective emotional and cognitive inputs of multiple participants</p>
+                        <div class="product-buttons">
+                            <a href="collective_consciousness_canvas.html" class="btn primary-btn">Learn More</a>
+                            <a href="collective_consciousness_preview.html" class="btn secondary-btn">Preview</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <section id="contact" class="contact">
+    
+    <section id="about" class="about">
         <div class="container">
-            <h2>Contact Us</h2>
-            <p>Email: info@luminainteractive.net</p>
+            <div class="section-header">
+                <h2 class="section-title">About Lumina</h2>
+                <p class="section-subtitle">Pioneering the future of interactive digital art</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-image" data-aos="fade-right">
+                    <div class="about-image-inner">
+                        <img src="lumina_logo.png" alt="Lumina Interactive">
+                    </div>
+                </div>
+                <div class="about-text" data-aos="fade-left">
+                    <h3>Our Vision</h3>
+                    <p>At Lumina Interactive, we believe that art should be a living, breathing experience that adapts to and evolves with its audience. Our team of neuroscientists, digital artists, and software engineers work together to create unprecedented interactive experiences that blur the line between creator and observer.</p>
+                    
+                    <h3>Our Technology</h3>
+                    <p>Using cutting-edge biometric sensors, machine learning algorithms, and real-time rendering techniques, we've developed a suite of products that respond to your unique physiological and neurological signatures. The result is art that is as individual as you are.</p>
+                    
+                    <div class="stats-container">
+                        <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+                            <div class="stat-number"><span class="counter" data-target="5">0</span>+</div>
+                            <div class="stat-label">Innovative Products</div>
+                        </div>
+                        <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                            <div class="stat-number"><span class="counter" data-target="10000">0</span>+</div>
+                            <div class="stat-label">Happy Users</div>
+                        </div>
+                        <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+                            <div class="stat-number"><span class="counter" data-target="25">0</span>+</div>
+                            <div class="stat-label">Countries Reached</div>
+                        </div>
+                        <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
+                            <div class="stat-number"><span class="counter" data-target="15">0</span>+</div>
+                            <div class="stat-label">Awards Won</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
-
-    <footer>
+    
+    <section id="testimonials" class="testimonials">
         <div class="container">
-            <p>&copy; 2025 Lumina Interactive. All rights reserved.</p>
+            <div class="section-header">
+                <h2 class="section-title">What Our Users Say</h2>
+                <p class="section-subtitle">Hear from those who have experienced our interactive art</p>
+            </div>
+            
+            <div class="testimonial-slider">
+                <div class="testimonial-track">
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="100">
+                        <div class="testimonial-content">
+                            <div class="testimonial-quote">"Neural Resonance Landscapes has completely transformed how I understand my own thought patterns. Seeing my ideas visualized in real-time is nothing short of magical."</div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Dr. Sarah Chen</div>
+                                <div class="testimonial-title">Neuroscientist</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="200">
+                        <div class="testimonial-content">
+                            <div class="testimonial-quote">"As an artist, Quantum Particle Symphony has opened up entirely new dimensions for my creative expression. The intuitive gesture controls make it feel like I'm conducting the universe itself."</div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Miguel Alvarez</div>
+                                <div class="testimonial-title">Digital Artist</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="300">
+                        <div class="testimonial-content">
+                            <div class="testimonial-quote">"Biometric Identity Portraits created the most accurate representation of my inner self I've ever seen. It's like looking into a mirror that reflects not just your appearance, but your essence."</div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Aisha Johnson</div>
+                                <div class="testimonial-title">Psychologist</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-controls">
+                    <button class="testimonial-prev">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="testimonial-next">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Have questions or want to learn more? Contact us today.</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-form" data-aos="fade-right">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn primary-btn">Send Message</button>
+                    </form>
+                </div>
+                
+                <div class="contact-info" data-aos="fade-left">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Email</h4>
+                            <p><a href="mailto:sultan@interactive.net">sultan@interactive.net</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Phone</h4>
+                            <p><a href="tel:+1234567890">+1 (234 ) 567-890</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Location</h4>
+                            <p>123 Innovation Way, Tech City, TC 12345</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <h4>Follow Us</h4>
+                        <div class="social-icons">
+                            <a href="https://twitter.com/luminainteractive" target="_blank" class="social-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                                </svg>
+                            </a>
+                            <a href="https://instagram.com/luminainteractive" target="_blank" class="social-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                            </a>
+                            <a href="https://facebook.com/luminainteractive" target="_blank" class="social-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                </svg>
+                            </a>
+                            <a href="https://tiktok.com/@luminainteractive" target="_blank" class="social-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 12a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path>
+                                    <path d="M15 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path>
+                                    <path d="M15 8v8a4 4 0 0 1-4 4"></path>
+                                    <line x1="15" y1="4" x2="15" y2="12"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="lumina_logo.png" alt="Lumina Interactive Logo">
+                    <p>Pioneering the future of interactive digital art</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Products</h4>
+                        <ul>
+                            <li><a href="neural_resonance_landscapes.html">Neural Resonance</a></li>
+                            <li><a href="quantum_particle_symphony.html">Quantum Particle</a></li>
+                            <li><a href="biometric_identity_portraits_fixed.html">Biometric Identity</a></li>
+                            <li><a href="spatial_memory_palaces_fixed.html">Spatial Memory</a></li>
+                            <li><a href="collective_consciousness_canvas.html">Collective Consciousness</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#testimonials">Testimonials</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Press</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Documentation</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Newsletter</h4>
+                        <p>Subscribe to our newsletter for the latest updates</p>
+                        <form class="newsletter-form">
+                            <input type="email" placeholder="Your email address" required>
+                            <button type="submit" class="btn primary-btn">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2025 Lumina Interactive. All rights reserved.
+                </div>
+                <div class="footer-social">
+                    <a href="https://twitter.com/luminainteractive" target="_blank" class="social-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/luminainteractive" target="_blank" class="social-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://facebook.com/luminainteractive" target="_blank" class="social-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://tiktok.com/@luminainteractive" target="_blank" class="social-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 12a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path>
+                            <path d="M15 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path>
+                            <path d="M15 8v8a4 4 0 0 1-4 4"></path>
+                            <line x1="15" y1="4" x2="15" y2="12"></line>
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
+    
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function( ) {
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            menuToggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.classList.toggle('menu-open');
+            });
+            
+            // Close mobile menu when clicking on a link
+            const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    menuToggle.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                });
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerHeight = document.querySelector('.header').offsetHeight;
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+        
+        // Custom cursor
+        document.addEventListener('DOMContentLoaded', function() {
+            const cursor = document.querySelector('.cursor');
+            const cursorFollower = document.querySelector('.cursor-follower');
+            
+            document.addEventListener('mousemove', function(e) {
+                gsap.to(cursor, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.1
+                });
+                
+                gsap.to(cursorFollower, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.3
+                });
+            });
+            
+            // Hover effect for interactive elements
+            const interactiveElements = document.querySelectorAll('a, button, .product-card, .testimonial-slide, input, textarea');
+            
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('active');
+                    cursorFollower.classList.add('active');
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('active');
+                    cursorFollower.classList.remove('active');
+                });
+            });
+        });
+        
+        // Hero particles animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('hero-particles');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 100;
+            
+            // Create particles
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 1,
+                    color: `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.1})`,
+                    velocity: {
+                        x: (Math.random() - 0.5) * 0.5,
+                        y: (Math.random() - 0.5) * 0.5
+                    }
+                });
+            }
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    // Draw particle
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                    
+                    // Update position
+                    particle.x += particle.velocity.x;
+                    particle.y += particle.velocity.y;
+                    
+                    // Boundary check
+                    if (particle.x < 0 || particle.x > canvas.width) {
+                        particle.velocity.x = -particle.velocity.x;
+                    }
+                    
+                    if (particle.y < 0 || particle.y > canvas.height) {
+                        particle.velocity.y = -particle.velocity.y;
+                    }
+                    
+                    // Draw connections
+                    particles.forEach(otherParticle => {
+                        const dx = particle.x - otherParticle.x;
+                        const dy = particle.y - otherParticle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance / 100)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particle.x, particle.y);
+                            ctx.lineTo(otherParticle.x, otherParticle.y);
+                            ctx.stroke();
+                        }
+                    });
+                });
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        });
+        
+        // Testimonial slider
+        document.addEventListener('DOMContentLoaded', function() {
+            const track = document.querySelector('.testimonial-track');
+            const slides = document.querySelectorAll('.testimonial-slide');
+            const prevButton = document.querySelector('.testimonial-prev');
+            const nextButton = document.querySelector('.testimonial-next');
+            
+            if (!track || !slides.length || !prevButton || !nextButton) return;
+            
+            let currentIndex = 0;
+            const slideWidth = slides[0].offsetWidth;
+            const slideMargin = parseInt(window.getComputedStyle(slides[0]).marginRight);
+            const totalSlides = slides.length;
+            
+            // Set initial position
+            updateSlidePosition();
+            
+            // Previous button click
+            prevButton.addEventListener('click', function() {
+                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                updateSlidePosition();
+            });
+            
+            // Next button click
+            nextButton.addEventListener('click', function() {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateSlidePosition();
+            });
+            
+            // Update slide position
+            function updateSlidePosition() {
+                const position = -(currentIndex * (slideWidth + slideMargin));
+                gsap.to(track, {
+                    x: position,
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
+            }
+            
+            // Auto slide
+            let autoSlideInterval = setInterval(function() {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateSlidePosition();
+            }, 5000);
+            
+            // Pause auto slide on hover
+            track.addEventListener('mouseenter', function() {
+                clearInterval(autoSlideInterval);
+            });
+            
+            track.addEventListener('mouseleave', function() {
+                autoSlideInterval = setInterval(function() {
+                    currentIndex = (currentIndex + 1) % totalSlides;
+                    updateSlidePosition();
+                }, 5000);
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const newSlideWidth = slides[0].offsetWidth;
+                const newSlideMargin = parseInt(window.getComputedStyle(slides[0]).marginRight);
+                
+                const position = -(currentIndex * (newSlideWidth + newSlideMargin));
+                gsap.set(track, { x: position });
+            });
+        });
+        
+        // Animate counter
+        document.addEventListener('DOMContentLoaded', function() {
+            const counters = document.querySelectorAll('.counter');
+            
+            const options = {
+                threshold: 0.5
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = parseInt(counter.getAttribute('data-target'));
+                        let count = 0;
+                        const duration = 2000; // 2 seconds
+                        const interval = duration / target;
+                        
+                        const timer = setInterval(function() {
+                            count++;
+                            counter.textContent = count;
+                            
+                            if (count >= target) {
+                                clearInterval(timer);
+                            }
+                        }, interval);
+                        
+                        observer.unobserve(counter);
+                    }
+                });
+            }, options);
+            
+            counters.forEach(counter => {
+                observer.observe(counter);
+            });
+        });
+        
+        // Form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Simulate form submission
+                    const submitButton = this.querySelector('button[type="submit"]');
+                    const originalText = submitButton.textContent;
+                    
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Sending...';
+                    
+                    setTimeout(function() {
+                        // Show success message
+                        contactForm.innerHTML = `
+                            <div class="form-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                <h3>Message Sent!</h3>
+                                <p>Thank you for contacting us. We'll get back to you shortly.</p>
+                            </div>
+                        `;
+                    }, 2000 );
+                });
+            }
+        });
+        
+        // Scroll reveal animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('[data-aos]');
+            
+            const options = {
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const element = entry.target;
+                        const delay = element.getAttribute('data-aos-delay') || 0;
+                        
+                        setTimeout(function() {
+                            element.classList.add('aos-animate');
+                        }, delay);
+                        
+                        observer.unobserve(element);
+                    }
+                });
+            }, options);
+            
+            animatedElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+        
+        // Sticky header
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('.header');
+            const heroSection = document.querySelector('.hero');
+            
+            if (!header || !heroSection) return;
+            
+            const heroHeight = heroSection.offsetHeight;
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > heroHeight * 0.8) {
+                    header.classList.add('sticky');
+                } else {
+                    header.classList.remove('sticky');
+                }
+            });
+        });
+        
+        // Page transitions with Barba.js
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof barba !== 'undefined') {
+                barba.init({
+                    transitions: [{
+                        name: 'opacity-transition',
+                        leave(data) {
+                            return gsap.to(data.current.container, {
+                                opacity: 0,
+                                duration: 0.5
+                            });
+                        },
+                        enter(data) {
+                            return gsap.from(data.next.container, {
+                                opacity: 0,
+                                duration: 0.5
+                            });
+                        }
+                    }]
+                });
+            }
+        });
+    </script>
 </body>
 </html>
+
