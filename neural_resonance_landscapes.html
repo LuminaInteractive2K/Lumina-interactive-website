@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Resonance Landscapes - Interactive Demo</title>
+    <style>
+        :root {
+            --primary: #4a9fff;
+            --secondary: #9d4eff;
+            --accent: #ff4e8a;
+            --background: #050b1f;
+            --text: #ffffff;
+            --panel: rgba(30, 40, 70, 0.8);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        header {
+            padding: 1rem 2rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            position: relative;
+        }
+        
+        .visualization {
+            flex: 1;
+            position: relative;
+        }
+        
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--panel);
+            padding: 1rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            display: flex;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .control-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 150px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
+        .value-display {
+            font-size: 0.9rem;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .side-panel {
+            width: 300px;
+            background-color: var(--panel);
+            padding: 1.5rem;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 5;
+        }
+        
+        .panel-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .brainwave-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .indicator-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .delta .indicator-color { background-color: #4a9fff; }
+        .theta .indicator-color { background-color: #9d4eff; }
+        .alpha .indicator-color { background-color: #4aff9f; }
+        .beta .indicator-color { background-color: #ff4e8a; }
+        .gamma .indicator-color { background-color: #ffcc4a; }
+        
+        .indicator-label {
+            flex: 1;
+        }
+        
+        .indicator-value {
+            font-weight: 600;
+            min-width: 40px;
+            text-align: right;
+        }
+        
+        .landscape-element {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .element-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .element-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: .4s;
+            border-radius: 20px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #4aff9f;
+            box-shadow: 0 0 10px #4aff9f;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .simulation-info {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--panel);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        
+        .info-label {
+            opacity: 0.8;
+        }
+        
+        .info-value {
+            font-weight: 600;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background-color: var(--panel);
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .modal-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-section-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+        
+        .device-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .device-card {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .device-card:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .device-card.selected {
+            border-color: var(--primary);
+        }
+        
+        .device-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .device-info {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 1s ease;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .loading-subtext {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 300px;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .side-panel {
+                position: fixed;
+                right: 0;
+                top: 0;
+                height: 100%;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .side-panel.active {
+                transform: translateX(0);
+            }
+            
+            .panel-toggle {
+                position: absolute;
+                top: 50%;
+                left: -40px;
+                transform: translateY(-50%);
+                background-color: var(--panel);
+                border: none;
+                color: white;
+                width: 40px;
+                height: 40px;
+                border-radius: 50% 0 0 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .controls {
+                flex-direction: column;
+                width: 90%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Initializing Neural Resonance Landscapes</div>
+        <div class="loading-subtext">Preparing neural network models and 3D environment...</div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">NEURAL RESONANCE LANDSCAPES</div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="helpBtn">Help</button>
+                <button class="btn" id="connectBtn">Connect Device</button>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="visualization">
+                <canvas id="canvas"></canvas>
+                
+                <div class="simulation-info">
+                    <div class="info-row">
+                        <span class="info-label">Mode:</span>
+                        <span class="info-value" id="modeDisplay">Simulation</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">FPS:</span>
+                        <span class="info-value" id="fpsDisplay">60</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Vertices:</span>
+                        <span class="info-value" id="verticesDisplay">125,000</span>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <span class="control-label">Amplitude</span>
+                        <div class="slider-container">
+                            <input type="range" id="amplitudeSlider" min="0" max="100" value="50">
+                            <span class="value-display" id="amplitudeValue">50%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <span class="control-label">Frequency</span>
+                        <div class="slider-container">
+                            <input type="range" id="frequencySlider" min="0" max="100" value="30">
+                            <span class="value-display" id="frequencyValue">30%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <span class="control-label">Complexity</span>
+                        <div class="slider-container">
+                            <input type="range" id="complexitySlider" min="0" max="100" value="70">
+                            <span class="value-display" id="complexityValue">70%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <span class="control-label">Responsiveness</span>
+                        <div class="slider-container">
+                            <input type="range" id="responsivenessSlider" min="0" max="100" value="80">
+                            <span class="value-display" id="responsivenessValue">80%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="side-panel">
+                <button class="panel-toggle" id="panelToggle">
+                    ≡
+                </button>
+                
+                <div class="panel-section">
+                    <div class="panel-title">Brainwave Activity</div>
+                    <div class="brainwave-indicator delta">
+                        <div class="indicator-color"></div>
+                        <span class="indicator-label">Delta (0.5-4Hz)</span>
+                        <span class="indicator-value" id="deltaValue">23%</span>
+                    </div>
+                    <div class="brainwave-indicator theta">
+                        <div class="indicator-color"></div>
+                        <span class="indicator-label">Theta (4-8Hz)</span>
+                        <span class="indicator-value" id="thetaValue">18%</span>
+                    </div>
+                    <div class="brainwave-indicator alpha">
+                        <div class="indicator-color"></div>
+                        <span class="indicator-label">Alpha (8-13Hz)</span>
+                        <span class="indicator-value" id="alphaValue">35%</span>
+                    </div>
+                    <div class="brainwave-indicator beta">
+                        <div class="indicator-color"></div>
+                        <span class="indicator-label">Beta (13-30Hz)</span>
+                        <span class="indicator-value" id="betaValue">15%</span>
+                    </div>
+                    <div class="brainwave-indicator gamma">
+                        <div class="indicator-color"></div>
+                        <span class="indicator-label">Gamma (30-100Hz)</span>
+                        <span class="indicator-value" id="gammaValue">9%</span>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">Landscape Elements</div>
+                    <div class="landscape-element">
+                        <div class="element-name">
+                            <div class="element-icon">🏔️</div>
+                            <span>Mountains</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked id="mountainsToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="landscape-element">
+                        <div class="element-name">
+                            <div class="element-icon">💧</div>
+                            <span>Water</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked id="waterToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="landscape-element">
+                        <div class="element-name">
+                            <div class="element-icon">🌲</div>
+                            <span>Vegetation</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked id="vegetationToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="landscape-element">
+                        <div class="element-name">
+                            <div class="element-icon">☁️</div>
+                            <span>Atmosphere</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked id="atmosphereToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="landscape-element">
+                        <div class="element-name">
+                            <div class="element-icon">✨</div>
+                            <span>Particles</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked id="particlesToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">Device Connection</div>
+                    <div class="connection-status">
+                        <div class="status-indicator"></div>
+                        <span id="connectionStatus">Simulating brainwave data</span>
+                    </div>
+                    <div class="btn-group" style="margin-top: 0.5rem;">
+                        <button class="btn btn-secondary" id="simulateBtn">Simulate</button>
+                        <button class="btn" id="recordBtn">Record Session</button>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">Presets</div>
+                    <div class="btn-group" style="flex-wrap: wrap;">
+                        <button class="btn btn-secondary" data-preset="meditation">Meditation</button>
+                        <button class="btn btn-secondary" data-preset="focus">Focus</button>
+                        <button class="btn btn-secondary" data-preset="creativity">Creativity</button>
+                        <button class="btn btn-secondary" data-preset="relaxation">Relaxation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="connectModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeConnectModal">×</button>
+            <h2 class="modal-title">Connect EEG Device</h2>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">Available Devices</h3>
+                <p>Select your EEG device from the list below:</p>
+                
+                <div class="device-selection">
+                    <div class="device-card selected">
+                        <div class="device-name">Muse 2</div>
+                        <div class="device-info">Last connected: Today, 10:23 AM</div>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-name">Emotiv EPOC X</div>
+                        <div class="device-info">Not connected before</div>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-name">NeuroSky MindWave</div>
+                        <div class="device-info">Last connected: Yesterday</div>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-name">OpenBCI Ganglion</div>
+                        <div class="device-info">Not connected before</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">Connection Method</h3>
+                <div class="btn-group" style="margin-top: 0.5rem;">
+                    <button class="btn" style="flex: 1;">Bluetooth</button>
+                    <button class="btn btn-secondary" style="flex: 1;">USB</button>
+                    <button class="btn btn-secondary" style="flex: 1;">Wi-Fi</button>
+                </div>
+            </div>
+            
+            <div class="modal-section" style="text-align: center;">
+                <button class="btn" id="startConnectionBtn">Connect Device</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeHelpModal">×</button>
+            <h2 class="modal-title">Neural Resonance Landscapes Help</h2>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">About</h3>
+                <p>Neural Resonance Landscapes is an advanced interactive art experience that transforms your brainwave patterns into dynamic 3D landscapes. The visualization responds in real-time to your mental state, creating a unique and personalized environment.</p>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">Controls</h3>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>Amplitude:</strong> Controls the height and intensity of landscape features.</li>
+                    <li><strong>Frequency:</strong> Adjusts how quickly the landscape changes and evolves.</li>
+                    <li><strong>Complexity:</strong> Determines the level of detail in the generated landscape.</li>
+                    <li><strong>Responsiveness:</strong> Sets how quickly the landscape responds to changes in brainwave patterns.</li>
+                </ul>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">Brainwave Types</h3>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>Delta (0.5-4Hz):</strong> Deep sleep, healing, unconscious mind.</li>
+                    <li><strong>Theta (4-8Hz):</strong> Drowsiness, meditation, creativity.</li>
+                    <li><strong>Alpha (8-13Hz):</strong> Relaxation, calmness, present moment awareness.</li>
+                    <li><strong>Beta (13-30Hz):</strong> Active thinking, focus, alertness.</li>
+                    <li><strong>Gamma (30-100Hz):</strong> Higher mental activity, perception, consciousness.</li>
+                </ul>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">Compatible Devices</h3>
+                <p>Neural Resonance Landscapes works with most consumer EEG headsets, including:</p>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li>Muse 2 & S</li>
+                    <li>Emotiv EPOC, EPOC+, EPOC X, Insight</li>
+                    <li>NeuroSky MindWave</li>
+                    <li>OpenBCI (Ganglion, Cyton)</li>
+                    <li>Neurosity Crown</li>
+                </ul>
+                <p style="margin-top: 0.5rem;">Don't have an EEG device? Use the simulation mode to experience the visualization.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Initialize Three.js scene
+        let scene, camera, renderer, terrain, water, sky;
+        let lastFrameTime = 0;
+        let frameCount = 0;
+        let fps = 60;
+        
+        // Simulated brainwave data
+        let brainwaveData = {
+            delta: 23,
+            theta: 18,
+            alpha: 35,
+            beta: 15,
+            gamma: 9
+        };
+        
+        // Animation parameters
+        let params = {
+            amplitude: 50,
+            frequency: 30,
+            complexity: 70,
+            responsiveness: 80
+        };
+        
+        // Element visibility
+        let elementVisibility = {
+            mountains: true,
+            water: true,
+            vegetation: true,
+            atmosphere: true,
+            particles: true
+        };
+        
+        // Initialize the application
+        function init() {
+            initThreeJS();
+            initEventListeners();
+            simulateLoading();
+            animate();
+        }
+        
+        // Initialize Three.js scene
+        function initThreeJS() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x050b1f);
+            scene.fog = new THREE.FogExp2(0x050b1f, 0.002);
+            
+            // Create camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 30, 100);
+            camera.lookAt(0, 0, 0);
+            
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Create terrain
+            createTerrain();
+            
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+        }
+        
+        // Create terrain mesh
+        function createTerrain() {
+            // Create terrain geometry
+            const geometry = new THREE.PlaneGeometry(200, 200, 100, 100);
+            geometry.rotateX(-Math.PI / 2);
+            
+            // Create terrain material
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x4a9fff,
+                wireframe: true,
+                emissive: 0x4a9fff,
+                emissiveIntensity: 0.3
+            });
+            
+            // Create terrain mesh
+            terrain = new THREE.Mesh(geometry, material);
+            scene.add(terrain);
+            
+            // Update vertex display
+            document.getElementById('verticesDisplay').textContent = (geometry.attributes.position.count).toLocaleString();
+        }
+        
+        // Update terrain based on brainwave data
+        function updateTerrain(time) {
+            if (!terrain) return;
+            
+            const positions = terrain.geometry.attributes.position;
+            const amp = params.amplitude / 50;
+            const freq = params.frequency / 100;
+            const resp = params.responsiveness / 100;
+            
+            // Calculate influence of each brainwave type
+            const deltaInfluence = brainwaveData.delta / 100 * resp;
+            const thetaInfluence = brainwaveData.theta / 100 * resp;
+            const alphaInfluence = brainwaveData.alpha / 100 * resp;
+            const betaInfluence = brainwaveData.beta / 100 * resp;
+            const gammaInfluence = brainwaveData.gamma / 100 * resp;
+            
+            for (let i = 0; i < positions.count; i++) {
+                const x = positions.getX(i);
+                const z = positions.getZ(i);
+                
+                // Base terrain
+                let y = 0;
+                
+                // Delta waves - slow, large amplitude
+                if (elementVisibility.mountains) {
+                    y += Math.sin(x * 0.05 * freq + time * 0.1) * 
+                         Math.cos(z * 0.05 * freq + time * 0.1) * 
+                         10 * amp * deltaInfluence;
+                }
+                
+                // Theta waves - dreamlike patterns
+                if (elementVisibility.water) {
+                    y += Math.sin(x * 0.1 * freq + time * 0.2) * 
+                         Math.sin(z * 0.1 * freq + time * 0.15) * 
+                         5 * amp * thetaInfluence;
+                }
+                
+                // Alpha waves - smooth, rolling patterns
+                if (elementVisibility.vegetation) {
+                    y += Math.cos(x * 0.08 * freq + z * 0.08 * freq + time * 0.3) * 
+                         3 * amp * alphaInfluence;
+                }
+                
+                // Beta waves - more jagged, active patterns
+                if (elementVisibility.atmosphere) {
+                    y += Math.sin(x * 0.2 * freq + time * 0.4) * 
+                         Math.cos(z * 0.2 * freq + time * 0.4) * 
+                         2 * amp * betaInfluence;
+                }
+                
+                // Gamma waves - high frequency, complex patterns
+                if (elementVisibility.particles) {
+                    y += Math.sin(x * 0.3 * freq + z * 0.3 * freq + time * 0.5) * 
+                         Math.cos(x * 0.3 * freq - z * 0.3 * freq + time * 0.5) * 
+                         1 * amp * gammaInfluence;
+                }
+                
+                // Apply height
+                positions.setY(i, y);
+            }
+            
+            terrain.geometry.attributes.position.needsUpdate = true;
+            terrain.geometry.computeVertexNormals();
+        }
+        
+        // Animation loop
+        function animate(time) {
+            requestAnimationFrame(animate);
+            
+            // Convert time to seconds
+            time = time / 1000;
+            
+            // Update terrain
+            updateTerrain(time);
+            
+            // Calculate FPS
+            frameCount++;
+            if (time - lastFrameTime >= 1) {
+                fps = Math.round(frameCount / (time - lastFrameTime));
+                document.getElementById('fpsDisplay').textContent = fps;
+                frameCount = 0;
+                lastFrameTime = time;
+                
+                // Simulate changing brainwave data
+                if (document.getElementById('modeDisplay').textContent === 'Simulation') {
+                    simulateBrainwaveChanges();
+                }
+            }
+            
+            // Render scene
+            renderer.render(scene, camera);
+        }
+        
+        // Handle window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        // Initialize event listeners
+        function initEventListeners() {
+            // Slider controls
+            document.getElementById('amplitudeSlider').addEventListener('input', function(e) {
+                params.amplitude = parseInt(e.target.value);
+                document.getElementById('amplitudeValue').textContent = e.target.value + '%';
+            });
+            
+            document.getElementById('frequencySlider').addEventListener('input', function(e) {
+                params.frequency = parseInt(e.target.value);
+                document.getElementById('frequencyValue').textContent = e.target.value + '%';
+            });
+            
+            document.getElementById('complexitySlider').addEventListener('input', function(e) {
+                params.complexity = parseInt(e.target.value);
+                document.getElementById('complexityValue').textContent = e.target.value + '%';
+                
+                // Update terrain complexity (recreate with different resolution)
+                updateTerrainComplexity(params.complexity);
+            });
+            
+            document.getElementById('responsivenessSlider').addEventListener('input', function(e) {
+                params.responsiveness = parseInt(e.target.value);
+                document.getElementById('responsivenessValue').textContent = e.target.value + '%';
+            });
+            
+            // Element toggles
+            document.getElementById('mountainsToggle').addEventListener('change', function(e) {
+                elementVisibility.mountains = e.target.checked;
+            });
+            
+            document.getElementById('waterToggle').addEventListener('change', function(e) {
+                elementVisibility.water = e.target.checked;
+            });
+            
+            document.getElementById('vegetationToggle').addEventListener('change', function(e) {
+                elementVisibility.vegetation = e.target.checked;
+            });
+            
+            document.getElementById('atmosphereToggle').addEventListener('change', function(e) {
+                elementVisibility.atmosphere = e.target.checked;
+            });
+            
+            document.getElementById('particlesToggle').addEventListener('change', function(e) {
+                elementVisibility.particles = e.target.checked;
+            });
+            
+            // Mode buttons
+            document.getElementById('simulateBtn').addEventListener('click', function() {
+                document.getElementById('modeDisplay').textContent = 'Simulation';
+                document.getElementById('connectionStatus').textContent = 'Simulating brainwave data';
+            });
+            
+            document.getElementById('recordBtn').addEventListener('click', function() {
+                alert('Recording feature will be available in the full version.');
+            });
+            
+            // Connect modal
+            document.getElementById('connectBtn').addEventListener('click', function() {
+                document.getElementById('connectModal').classList.add('active');
+            });
+            
+            document.getElementById('closeConnectModal').addEventListener('click', function() {
+                document.getElementById('connectModal').classList.remove('active');
+            });
+            
+            document.getElementById('startConnectionBtn').addEventListener('click', function() {
+                document.getElementById('connectModal').classList.remove('active');
+                simulateDeviceConnection();
+            });
+            
+            // Help modal
+            document.getElementById('helpBtn').addEventListener('click', function() {
+                document.getElementById('helpModal').classList.add('active');
+            });
+            
+            document.getElementById('closeHelpModal').addEventListener('click', function() {
+                document.getElementById('helpModal').classList.remove('active');
+            });
+            
+            // Preset buttons
+            const presetButtons = document.querySelectorAll('[data-preset]');
+            presetButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const preset = this.getAttribute('data-preset');
+                    applyPreset(preset);
+                });
+            });
+            
+            // Mobile panel toggle
+            document.getElementById('panelToggle').addEventListener('click', function() {
+                document.querySelector('.side-panel').classList.toggle('active');
+            });
+        }
+        
+        // Update terrain complexity
+        function updateTerrainComplexity(complexity) {
+            if (!terrain) return;
+            
+            // Remove old terrain
+            scene.remove(terrain);
+            
+            // Calculate resolution based on complexity
+            const resolution = Math.floor(50 + (complexity / 100) * 150);
+            
+            // Create new geometry with updated resolution
+            const geometry = new THREE.PlaneGeometry(200, 200, resolution, resolution);
+            geometry.rotateX(-Math.PI / 2);
+            
+            // Create new terrain with same material
+            terrain = new THREE.Mesh(geometry, terrain.material);
+            scene.add(terrain);
+            
+            // Update vertex display
+            document.getElementById('verticesDisplay').textContent = (geometry.attributes.position.count).toLocaleString();
+        }
+        
+        // Simulate changing brainwave data
+        function simulateBrainwaveChanges() {
+            // Gradually change brainwave values
+            brainwaveData.delta = Math.max(5, Math.min(95, brainwaveData.delta + (Math.random() - 0.5) * 5));
+            brainwaveData.theta = Math.max(5, Math.min(95, brainwaveData.theta + (Math.random() - 0.5) * 5));
+            brainwaveData.alpha = Math.max(5, Math.min(95, brainwaveData.alpha + (Math.random() - 0.5) * 5));
+            brainwaveData.beta = Math.max(5, Math.min(95, brainwaveData.beta + (Math.random() - 0.5) * 5));
+            brainwaveData.gamma = Math.max(5, Math.min(95, brainwaveData.gamma + (Math.random() - 0.5) * 5));
+            
+            // Normalize to ensure total is 100%
+            const total = brainwaveData.delta + brainwaveData.theta + brainwaveData.alpha + brainwaveData.beta + brainwaveData.gamma;
+            const factor = 100 / total;
+            
+            brainwaveData.delta = Math.round(brainwaveData.delta * factor);
+            brainwaveData.theta = Math.round(brainwaveData.theta * factor);
+            brainwaveData.alpha = Math.round(brainwaveData.alpha * factor);
+            brainwaveData.beta = Math.round(brainwaveData.beta * factor);
+            brainwaveData.gamma = Math.round(brainwaveData.gamma * factor);
+            
+            // Update display
+            document.getElementById('deltaValue').textContent = brainwaveData.delta + '%';
+            document.getElementById('thetaValue').textContent = brainwaveData.theta + '%';
+            document.getElementById('alphaValue').textContent = brainwaveData.alpha + '%';
+            document.getElementById('betaValue').textContent = brainwaveData.beta + '%';
+            document.getElementById('gammaValue').textContent = brainwaveData.gamma + '%';
+        }
+        
+        // Apply preset configurations
+        function applyPreset(preset) {
+            switch(preset) {
+                case 'meditation':
+                    params.amplitude = 40;
+                    params.frequency = 20;
+                    params.complexity = 60;
+                    params.responsiveness = 70;
+                    brainwaveData = { delta: 15, theta: 40, alpha: 30, beta: 10, gamma: 5 };
+                    break;
+                    
+                case 'focus':
+                    params.amplitude = 30;
+                    params.frequency = 50;
+                    params.complexity = 80;
+                    params.responsiveness = 90;
+                    brainwaveData = { delta: 5, theta: 10, alpha: 20, beta: 50, gamma: 15 };
+                    break;
+                    
+                case 'creativity':
+                    params.amplitude = 60;
+                    params.frequency = 40;
+                    params.complexity = 90;
+                    params.responsiveness = 85;
+                    brainwaveData = { delta: 10, theta: 35, alpha: 15, beta: 20, gamma: 20 };
+                    break;
+                    
+                case 'relaxation':
+                    params.amplitude = 35;
+                    params.frequency = 15;
+                    params.complexity = 50;
+                    params.responsiveness = 60;
+                    brainwaveData = { delta: 10, theta: 15, alpha: 60, beta: 10, gamma: 5 };
+                    break;
+            }
+            
+            // Update UI
+            document.getElementById('amplitudeSlider').value = params.amplitude;
+            document.getElementById('amplitudeValue').textContent = params.amplitude + '%';
+            
+            document.getElementById('frequencySlider').value = params.frequency;
+            document.getElementById('frequencyValue').textContent = params.frequency + '%';
+            
+            document.getElementById('complexitySlider').value = params.complexity;
+            document.getElementById('complexityValue').textContent = params.complexity + '%';
+            updateTerrainComplexity(params.complexity);
+            
+            document.getElementById('responsivenessSlider').value = params.responsiveness;
+            document.getElementById('responsivenessValue').textContent = params.responsiveness + '%';
+            
+            document.getElementById('deltaValue').textContent = brainwaveData.delta + '%';
+            document.getElementById('thetaValue').textContent = brainwaveData.theta + '%';
+            document.getElementById('alphaValue').textContent = brainwaveData.alpha + '%';
+            document.getElementById('betaValue').textContent = brainwaveData.beta + '%';
+            document.getElementById('gammaValue').textContent = brainwaveData.gamma + '%';
+        }
+        
+        // Simulate loading process
+        function simulateLoading() {
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            const progressFill = document.querySelector('.progress-fill');
+            const loadingText = document.querySelector('.loading-text');
+            const loadingSubtext = document.querySelector('.loading-subtext');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    loadingText.textContent = 'Neural Resonance Landscapes Ready';
+                    loadingSubtext.textContent = 'Entering visualization...';
+                    
+                    setTimeout(() => {
+                        loadingOverlay.style.opacity = 0;
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                        }, 1000);
+                    }, 500);
+                }
+                
+                progressFill.style.width = `${progress}%`;
+                
+                if (progress > 30 && progress < 60) {
+                    loadingSubtext.textContent = 'Loading neural network models...';
+                } else if (progress >= 60 && progress < 90) {
+                    loadingSubtext.textContent = 'Calibrating visualization parameters...';
+                }
+            }, 200);
+        }
+        
+        // Simulate device connection
+        function simulateDeviceConnection() {
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            const progressFill = document.querySelector('.progress-fill');
+            const loadingText = document.querySelector('.loading-text');
+            const loadingSubtext = document.querySelector('.loading-subtext');
+            
+            // Show loading overlay
+            loadingOverlay.style.display = 'flex';
+            loadingOverlay.style.opacity = 1;
+            progressFill.style.width = '0%';
+            loadingText.textContent = 'Connecting to EEG Device';
+            loadingSubtext.textContent = 'Establishing Bluetooth connection...';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    loadingText.textContent = 'Device Connected';
+                    loadingSubtext.textContent = 'Calibrating sensors...';
+                    
+                    setTimeout(() => {
+                        loadingOverlay.style.opacity = 0;
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                            
+                            // Update UI to show connected state
+                            document.getElementById('modeDisplay').textContent = 'Live Data';
+                            document.getElementById('connectionStatus').textContent = 'Connected to Muse 2';
+                        }, 1000);
+                    }, 1500);
+                }
+                
+                progressFill.style.width = `${progress}%`;
+                
+                if (progress > 30 && progress < 60) {
+                    loadingSubtext.textContent = 'Pairing with device...';
+                } else if (progress >= 60 && progress < 90) {
+                    loadingSubtext.textContent = 'Initializing data stream...';
+                }
+            }, 200);
+        }
+        
+        // Start the application when the page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

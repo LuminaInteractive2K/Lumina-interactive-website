@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collective Consciousness Canvas - Interactive Demo</title>
+    <style>
+        :root {
+            --primary: #00c9a7;
+            --secondary: #845ec2;
+            --accent: #ff9671;
+            --background: #1a1a2e;
+            --text: #f0f0f0;
+            --panel: rgba(26, 26, 46, 0.85);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        header {
+            padding: 1rem 2rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            position: relative;
+        }
+        
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+        
+        .side-panel {
+            width: 350px;
+            background-color: var(--panel);
+            padding: 1.5rem;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 10;
+        }
+        
+        .panel-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .collaborator {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .collaborator-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--background);
+        }
+        
+        .collaborator-details {
+            flex: 1;
+        }
+        
+        .collaborator-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .collaborator-status {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .tool-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tool-option:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .tool-option.active {
+            background-color: rgba(0, 201, 167, 0.2);
+            border: 1px solid var(--primary);
+        }
+        
+        .tool-icon {
+            font-size: 1.2rem;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .tool-label {
+            flex: 1;
+            margin-left: 0.5rem;
+        }
+        
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .color-swatch:hover {
+            transform: scale(1.2);
+        }
+        
+        .color-swatch.active {
+            border: 2px solid white;
+            transform: scale(1.2);
+        }
+        
+        .color-palette {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 201, 167, 0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 5px var(--primary);
+        }
+        
+        .value-display {
+            font-size: 0.9rem;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            background-color: var(--primary);
+            color: var(--background);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(132, 94, 194, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background-color: var(--panel);
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid rgba(0, 201, 167, 0.3);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            text-align: center;
+        }
+        
+        .modal-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-section-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+        
+        .ai-suggestion {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        
+        .ai-suggestion:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+        
+        .ai-suggestion-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+        }
+        
+        .ai-suggestion-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .chat-message {
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            max-width: 80%;
+        }
+        
+        .chat-message.user {
+            align-self: flex-end;
+            background-color: var(--primary);
+            color: var(--background);
+            border-bottom-right-radius: 0.25rem;
+        }
+        
+        .chat-message.other {
+            align-self: flex-start;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-bottom-left-radius: 0.25rem;
+        }
+        
+        .chat-message.ai {
+            align-self: flex-start;
+            background-color: var(--secondary);
+            color: var(--text);
+            border-bottom-left-radius: 0.25rem;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(0, 0, 0, 0.2);
+            color: var(--text);
+        }
+        
+        .chat-input button {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            background-color: var(--primary);
+            color: var(--background);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 1s ease;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(0, 201, 167, 0.2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .loading-subtext {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 300px;
+            height: 6px;
+            background-color: rgba(0, 201, 167, 0.1);
+            border-radius: 3px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem;
+            background-color: var(--panel);
+            border-left: 4px solid var(--primary);
+            border-radius: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            max-width: 300px;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.active {
+            transform: translateX(0);
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-message {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .cursor {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+        
+        .cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        .cursor-name {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column-reverse;
+            }
+            .side-panel {
+                width: 100%;
+                height: 300px;
+                border-left: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            header {
+                padding: 0.75rem 1rem;
+            }
+            .logo {
+                font-size: 1.2rem;
+            }
+            .side-panel {
+                height: 250px;
+                padding: 1rem;
+            }
+            .panel-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Initializing Collective Consciousness Canvas</div>
+        <div class="loading-subtext">Connecting to collaborative network...</div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">COLLECTIVE CONSCIOUSNESS CANVAS</div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="helpBtn">Help</button>
+                <button class="btn" id="aiAssistBtn">AI Assist</button>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="canvas-container">
+                <canvas id="canvas"></canvas>
+                <!-- Cursors for other users will be added here dynamically -->
+            </div>
+            
+            <div class="side-panel">
+                <div class="panel-section">
+                    <div class="panel-title">Active Collaborators</div>
+                    <div id="collaborators-list">
+                        <div class="collaborator">
+                            <div class="collaborator-avatar" style="background-color: #00c9a7;">Y</div>
+                            <div class="collaborator-details">
+                                <div class="collaborator-name">You</div>
+                                <div class="collaborator-status">Active now</div>
+                            </div>
+                        </div>
+                        <div class="collaborator">
+                            <div class="collaborator-avatar" style="background-color: #ff9671;">A</div>
+                            <div class="collaborator-details">
+                                <div class="collaborator-name">AI Assistant</div>
+                                <div class="collaborator-status">Ready to assist</div>
+                            </div>
+                        </div>
+                        <div class="collaborator">
+                            <div class="collaborator-avatar" style="background-color: #845ec2;">S</div>
+                            <div class="collaborator-details">
+                                <div class="collaborator-name">Simulated User</div>
+                                <div class="collaborator-status">Drawing...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">Tools</div>
+                    <div class="tool-option active" data-tool="brush">
+                        <div class="tool-icon">🖌️</div>
+                        <div class="tool-label">Brush</div>
+                    </div>
+                    <div class="tool-option" data-tool="eraser">
+                        <div class="tool-icon">🧽</div>
+                        <div class="tool-label">Eraser</div>
+                    </div>
+                    <div class="tool-option" data-tool="shape">
+                        <div class="tool-icon">⭕</div>
+                        <div class="tool-label">Shape</div>
+                    </div>
+                    <div class="tool-option" data-tool="text">
+                        <div class="tool-icon">📝</div>
+                        <div class="tool-label">Text</div>
+                    </div>
+                    <div class="tool-option" data-tool="select">
+                        <div class="tool-icon">👆</div>
+                        <div class="tool-label">Select</div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">Color Palette</div>
+                    <div class="color-palette">
+                        <div class="color-swatch active" style="background-color: #00c9a7;" data-color="#00c9a7"></div>
+                        <div class="color-swatch" style="background-color: #845ec2;" data-color="#845ec2"></div>
+                        <div class="color-swatch" style="background-color: #ff9671;" data-color="#ff9671"></div>
+                        <div class="color-swatch" style="background-color: #f9f871;" data-color="#f9f871"></div>
+                        <div class="color-swatch" style="background-color: #ffc75f;" data-color="#ffc75f"></div>
+                        <div class="color-swatch" style="background-color: #f8a5c2;" data-color="#f8a5c2"></div>
+                        <div class="color-swatch" style="background-color: #c34a36;" data-color="#c34a36"></div>
+                        <div class="color-swatch" style="background-color: #ffffff;" data-color="#ffffff"></div>
+                        <div class="color-swatch" style="background-color: #000000;" data-color="#000000"></div>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">Brush Size</div>
+                    <div class="slider-container">
+                        <input type="range" id="brushSizeSlider" min="1" max="50" value="5">
+                        <span class="value-display" id="brushSizeValue">5px</span>
+                    </div>
+                </div>
+                
+                <div class="panel-section">
+                    <div class="panel-title">Canvas Controls</div>
+                    <div class="btn-group" style="flex-direction: column; gap: 0.75rem;">
+                        <button class="btn btn-secondary" id="clearCanvasBtn">Clear Canvas</button>
+                        <button class="btn btn-secondary" id="saveCanvasBtn">Save Artwork</button>
+                        <button class="btn btn-secondary" id="shareCanvasBtn">Share Canvas</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="aiAssistModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeAiAssistModal">×</button>
+            <h2 class="modal-title">AI Creative Assistant</h2>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">Suggestions</h3>
+                <p>The AI can suggest ideas or help complete your artwork:</p>
+                
+                <div class="ai-suggestion" data-suggestion="complete">
+                    <div class="ai-suggestion-title">Complete Current Artwork</div>
+                    <div class="ai-suggestion-description">Let the AI analyze and suggest completions for your current work.</div>
+                </div>
+                
+                <div class="ai-suggestion" data-suggestion="enhance">
+                    <div class="ai-suggestion-title">Enhance Selected Area</div>
+                    <div class="ai-suggestion-description">Select an area for the AI to enhance with additional details.</div>
+                </div>
+                
+                <div class="ai-suggestion" data-suggestion="style">
+                    <div class="ai-suggestion-title">Apply Artistic Style</div>
+                    <div class="ai-suggestion-description">Transform your work with various artistic styles.</div>
+                </div>
+                
+                <div class="ai-suggestion" data-suggestion="idea">
+                    <div class="ai-suggestion-title">Generate New Ideas</div>
+                    <div class="ai-suggestion-description">Get fresh creative concepts based on a theme or prompt.</div>
+                </div>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">Chat with AI</h3>
+                <div class="chat-container" id="aiChat">
+                    <div class="chat-message ai">
+                        How can I assist with your creative process today?
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="Ask the AI assistant..." id="aiChatInput">
+                    <button id="aiChatSendBtn">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeHelpModal">×</button>
+            <h2 class="modal-title">Collective Consciousness Canvas Help</h2>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">About</h3>
+                <p>Welcome to the Collective Consciousness Canvas! This is a collaborative art platform where multiple participants can co-create in real-time. The AI assistant helps harmonize individual contributions into cohesive artistic expressions.</p>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">Tools</h3>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>Brush:</strong> Free-form drawing with customizable size and color.</li>
+                    <li><strong>Eraser:</strong> Remove parts of the artwork.</li>
+                    <li><strong>Shape:</strong> Add geometric shapes like circles, squares, and triangles.</li>
+                    <li><strong>Text:</strong> Add text elements to your creation.</li>
+                    <li><strong>Select:</strong> Select and move elements on the canvas.</li>
+                </ul>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">Collaboration</h3>
+                <p>See other participants' cursors in real-time as they work on the canvas. The AI assistant can help harmonize different styles and suggest creative directions.</p>
+            </div>
+            
+            <div class="modal-section">
+                <h3 class="modal-section-title">AI Assistant</h3>
+                <p>Click the "AI Assist" button to access AI features:</p>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>Complete Current Artwork:</strong> AI analyzes and suggests completions.</li>
+                    <li><strong>Enhance Selected Area:</strong> Add AI-generated details to specific areas.</li>
+                    <li><strong>Apply Artistic Style:</strong> Transform your work with various artistic styles.</li>
+                    <li><strong>Generate New Ideas:</strong> Get creative concepts based on themes or prompts.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <div class="notification-title">Notification Title</div>
+        <div class="notification-message">Notification message here.</div>
+    </div>
+
+    <script>
+        // Canvas setup
+        let canvas, ctx;
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let currentTool = 'brush';
+        let currentColor = '#00c9a7';
+        let brushSize = 5;
+        let otherCursors = {};
+        
+        // Simulated collaborative data
+        const simulatedUsers = [
+            { id: 'user1', name: 'Alex', color: '#845ec2', x: 0, y: 0 },
+            { id: 'user2', name: 'Morgan', color: '#ff9671', x: 0, y: 0 }
+        ];
+        
+        // Drawing history for undo/redo
+        let drawingHistory = [];
+        let historyIndex = -1;
+        
+        function init() {
+            initCanvas();
+            initEventListeners();
+            initCursors();
+            simulateLoading();
+            simulateCollaboration();
+        }
+        
+        function initCanvas() {
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+            
+            // Initial canvas state
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            saveDrawingState();
+        }
+        
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+        
+        function initEventListeners() {
+            window.addEventListener('resize', () => {
+                // Save current canvas
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+                tempCtx.drawImage(canvas, 0, 0);
+                
+                // Resize and restore
+                resizeCanvas();
+                ctx.drawImage(tempCanvas, 0, 0);
+            });
+            
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // Touch support
+            canvas.addEventListener('touchstart', handleTouch);
+            canvas.addEventListener('touchmove', handleTouch);
+            canvas.addEventListener('touchend', () => isDrawing = false);
+            
+            // Tool selection
+            document.querySelectorAll('.tool-option').forEach(tool => {
+                tool.addEventListener('click', function() {
+                    document.querySelectorAll('.tool-option').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentTool = this.dataset.tool;
+                    updateCursor();
+                });
+            });
+            
+            // Color selection
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.addEventListener('click', function() {
+                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                    this.classList.add('active');
+                    currentColor = this.dataset.color;
+                });
+            });
+            
+            // Brush size slider
+            document.getElementById('brushSizeSlider').addEventListener('input', function() {
+                brushSize = parseInt(this.value);
+                document.getElementById('brushSizeValue').textContent = `${brushSize}px`;
+            });
+            
+            // Canvas controls
+            document.getElementById('clearCanvasBtn').addEventListener('click', clearCanvas);
+            document.getElementById('saveCanvasBtn').addEventListener('click', saveCanvas);
+            document.getElementById('shareCanvasBtn').addEventListener('click', shareCanvas);
+            
+            // Modal controls
+            document.getElementById('aiAssistBtn').addEventListener('click', () => {
+                document.getElementById('aiAssistModal').classList.add('active');
+            });
+            document.getElementById('closeAiAssistModal').addEventListener('click', () => {
+                document.getElementById('aiAssistModal').classList.remove('active');
+            });
+            document.getElementById('helpBtn').addEventListener('click', () => {
+                document.getElementById('helpModal').classList.add('active');
+            });
+            document.getElementById('closeHelpModal').addEventListener('click', () => {
+                document.getElementById('helpModal').classList.remove('active');
+            });
+            
+            // AI chat
+            document.getElementById('aiChatSendBtn').addEventListener('click', sendAiMessage);
+            document.getElementById('aiChatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendAiMessage();
+            });
+            
+            // AI suggestions
+            document.querySelectorAll('.ai-suggestion').forEach(suggestion => {
+                suggestion.addEventListener('click', function() {
+                    const suggestionType = this.dataset.suggestion;
+                    handleAiSuggestion(suggestionType);
+                });
+            });
+        }
+        
+        function updateCursor() {
+            switch(currentTool) {
+                case 'brush':
+                    canvas.style.cursor = 'crosshair';
+                    break;
+                case 'eraser':
+                    canvas.style.cursor = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M20 20H7L3 16c-1.5-1.5-1.5-3.5 0-5l9-9c1.5-1.5 3.5-1.5 5 0l7 7c1.5 1.5 1.5 3.5 0 5l-4 4\'/%3E%3Cline x1=\'16\' y1=\'8\' x2=\'8\' y2=\'16\'/%3E%3C/svg%3E") 0 24, auto';
+                    break;
+                case 'shape':
+                    canvas.style.cursor = 'crosshair';
+                    break;
+                case 'text':
+                    canvas.style.cursor = 'text';
+                    break;
+                case 'select':
+                    canvas.style.cursor = 'pointer';
+                    break;
+                default:
+                    canvas.style.cursor = 'default';
+            }
+        }
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+            
+            // Handle different tools
+            if (currentTool === 'shape') {
+                // For shape tool, we'll just start the shape here
+                // Implementation would depend on shape type
+            } else if (currentTool === 'text') {
+                // For text tool, we might show a text input
+                const text = prompt('Enter text:');
+                if (text) {
+                    ctx.font = `${brushSize * 3}px Montserrat`;
+                    ctx.fillStyle = currentColor;
+                    ctx.fillText(text, lastX, lastY);
+                    saveDrawingState();
+                }
+                isDrawing = false;
+            }
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            // Update cursor position for collaboration
+            broadcastCursorPosition(e.offsetX, e.offsetY);
+            
+            if (currentTool === 'brush') {
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                ctx.lineWidth = brushSize;
+                ctx.strokeStyle = currentColor;
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+                
+                [lastX, lastY] = [e.offsetX, e.offsetY];
+            } else if (currentTool === 'eraser') {
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                ctx.lineWidth = brushSize;
+                ctx.strokeStyle = '#1a1a2e'; // Background color
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+                
+                [lastX, lastY] = [e.offsetX, e.offsetY];
+            }
+            // Shape tool would be handled differently
+        }
+        
+        function stopDrawing() {
+            if (isDrawing) {
+                isDrawing = false;
+                saveDrawingState();
+            }
+        }
+        
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 'mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+        
+        function clearCanvas() {
+            if (confirm('Are you sure you want to clear the canvas? This cannot be undone.')) {
+                ctx.fillStyle = '#1a1a2e';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                saveDrawingState();
+                showNotification('Canvas Cleared', 'The canvas has been cleared.');
+            }
+        }
+        
+        function saveCanvas() {
+            const link = document.createElement('a');
+            link.download = 'collective-consciousness-artwork.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showNotification('Artwork Saved', 'Your artwork has been saved to your device.');
+        }
+        
+        function shareCanvas() {
+            // In a real implementation, this would handle sharing functionality
+            showNotification('Share Feature', 'In a full implementation, this would allow sharing the canvas URL or image.');
+        }
+        
+        function saveDrawingState() {
+            // Trim any states after current index if we've gone back in history
+            if (historyIndex < drawingHistory.length - 1) {
+                drawingHistory = drawingHistory.slice(0, historyIndex + 1);
+            }
+            
+            // Save current state
+            drawingHistory.push(canvas.toDataURL());
+            historyIndex = drawingHistory.length - 1;
+            
+            // Limit history size to prevent memory issues
+            if (drawingHistory.length > 20) {
+                drawingHistory.shift();
+                historyIndex--;
+            }
+        }
+        
+        function undoDrawing() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                const img = new Image();
+                img.src = drawingHistory[historyIndex];
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+            }
+        }
+        
+        function redoDrawing() {
+            if (historyIndex < drawingHistory.length - 1) {
+                historyIndex++;
+                const img = new Image();
+                img.src = drawingHistory[historyIndex];
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+            }
+        }
+        
+        function initCursors() {
+            simulatedUsers.forEach(user => {
+                const cursor = document.createElement('div');
+                cursor.className = 'cursor';
+                cursor.style.borderColor = user.color;
+                cursor.innerHTML = `<div class="cursor-name" style="background-color: ${user.color}">${user.name}</div>`;
+                document.querySelector('.canvas-container').appendChild(cursor);
+                otherCursors[user.id] = cursor;
+            });
+        }
+        
+        function broadcastCursorPosition(x, y) {
+            // In a real implementation, this would send position to server
+            // For demo, we just update our local position
+        }
+        
+        function updateCursorPosition(userId, x, y) {
+            if (otherCursors[userId]) {
+                otherCursors[userId].style.transform = `translate(${x}px, ${y}px)`;
+            }
+        }
+        
+        function simulateCollaboration() {
+            // Simulate other users moving and drawing
+            setInterval(() => {
+                simulatedUsers.forEach(user => {
+                    // Random movement
+                    user.x += (Math.random() - 0.5) * 10;
+                    user.y += (Math.random() - 0.5) * 10;
+                    
+                    // Keep within canvas bounds
+                    user.x = Math.max(0, Math.min(canvas.width, user.x));
+                    user.y = Math.max(0, Math.min(canvas.height, user.y));
+                    
+                    updateCursorPosition(user.id, user.x, user.y);
+                    
+                    // Occasionally simulate drawing
+                    if (Math.random() < 0.01) {
+                        simulateUserDrawing(user);
+                    }
+                });
+            }, 50);
+        }
+        
+        function simulateUserDrawing(user) {
+            // Simulate a user drawing a simple shape
+            const startX = user.x;
+            const startY = user.y;
+            
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.lineWidth = Math.floor(Math.random() * 10) + 2;
+            ctx.strokeStyle = user.color;
+            
+            // Draw a small random shape
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            
+            const points = Math.floor(Math.random() * 5) + 3;
+            for (let i = 0; i < points; i++) {
+                const angle = (Math.PI * 2 / points) * i;
+                const radius = Math.random() * 20 + 10;
+                const x = startX + Math.cos(angle) * radius;
+                const y = startY + Math.sin(angle) * radius;
+                ctx.lineTo(x, y);
+            }
+            
+            ctx.closePath();
+            ctx.stroke();
+            
+            // Maybe fill some shapes
+            if (Math.random() > 0.5) {
+                ctx.fillStyle = user.color + '80'; // Add transparency
+                ctx.fill();
+            }
+            
+            saveDrawingState();
+        }
+        
+        function sendAiMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            const chatContainer = document.getElementById('aiChat');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user';
+            userMessage.textContent = message;
+            chatContainer.appendChild(userMessage);
+            
+            // Clear input
+            input.value = '';
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'chat-message ai';
+                
+                // Simple response logic
+                if (message.toLowerCase().includes('idea') || message.toLowerCase().includes('suggest')) {
+                    aiMessage.textContent = "I suggest trying a flowing abstract pattern with complementary colors. Start with curved lines in teal, then add accents in coral and gold.";
+                } else if (message.toLowerCase().includes('help') || message.toLowerCase().includes('how')) {
+                    aiMessage.textContent = "I can help! Try selecting the brush tool, choosing a color, and drawing freely. Or I can suggest specific artistic approaches if you tell me what you're trying to create.";
+                } else {
+                    aiMessage.textContent = "I understand. Would you like me to suggest some artistic elements that might complement what you're creating?";
+                }
+                
+                chatContainer.appendChild(aiMessage);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1000);
+        }
+        
+        function handleAiSuggestion(type) {
+            document.getElementById('aiAssistModal').classList.remove('active');
+            
+            switch(type) {
+                case 'complete':
+                    showNotification('AI Completion', 'Analyzing your artwork and generating suggestions...');
+                    setTimeout(() => {
+                        // In a real implementation, this would analyze the canvas and make intelligent completions
+                        simulateAiCompletion();
+                    }, 1500);
+                    break;
+                case 'enhance':
+                    showNotification('Select Area', 'Please select an area of your artwork for AI enhancement.');
+                    // Would implement area selection logic here
+                    break;
+                case 'style':
+                    showNotification('Style Transfer', 'Choose an artistic style to apply to your work.');
+                    // Would show style options here
+                    break;
+                case 'idea':
+                    const theme = prompt('Enter a theme or concept for inspiration:');
+                    if (theme) {
+                        showNotification('Generating Ideas', `Creating inspiration based on "${theme}"...`);
+                        // Would generate ideas based on theme
+                    }
+                    break;
+            }
+        }
+        
+        function simulateAiCompletion() {
+            // Save current state
+            const currentState = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            
+            // Simulate AI adding elements
+            ctx.globalAlpha = 0.7;
+            
+            // Add some flowing lines
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#00c9a7';
+            
+            for (let i = 0; i < 5; i++) {
+                const startX = Math.random() * canvas.width;
+                const startY = Math.random() * canvas.height;
+                
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                
+                let x = startX;
+                let y = startY;
+                
+                for (let j = 0; j < 100; j++) {
+                    x += Math.sin(j / 10) * 10;
+                    y += Math.cos(j / 10) * 10;
+                    
+                    if (x < 0 || x > canvas.width || y < 0 || y > canvas.height) break;
+                    
+                    ctx.lineTo(x, y);
+                }
+                
+                ctx.stroke();
+            }
+            
+            // Add some accent elements
+            ctx.fillStyle = '#ff9671';
+            for (let i = 0; i < 20; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = Math.random() * 20 + 5;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            ctx.globalAlpha = 1.0;
+            saveDrawingState();
+            
+            showNotification('AI Completion Added', 'The AI has suggested complementary elements to your artwork.');
+        }
+        
+        function showNotification(title, message) {
+            const notification = document.getElementById('notification');
+            notification.querySelector('.notification-title').textContent = title;
+            notification.querySelector('.notification-message').textContent = message;
+            
+            notification.classList.add('active');
+            
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 3000);
+        }
+        
+        function simulateLoading() {
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            const progressFill = document.querySelector('.progress-fill');
+            const loadingText = document.querySelector('.loading-text');
+            const loadingSubtext = document.querySelector('.loading-subtext');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    loadingText.textContent = 'Collective Canvas Ready';
+                    loadingSubtext.textContent = 'Begin creating together...';
+                    
+                    setTimeout(() => {
+                        loadingOverlay.style.opacity = 0;
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                        }, 1000);
+                    }, 500);
+                }
+                
+                progressFill.style.width = `${progress}%`;
+                
+                if (progress > 30 && progress < 60) {
+                    loadingSubtext.textContent = 'Establishing peer connections...';
+                } else if (progress >= 60 && progress < 90) {
+                    loadingSubtext.textContent = 'Initializing AI assistant...';
+                }
+            }, 200);
+        }
+        
+        // Initialize everything when the page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
