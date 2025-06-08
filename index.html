@@ -3,61 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Interactive - Futuristic Prototype</title>
-    <link rel="stylesheet" href="futuristic_styles.css">
-    <link rel="icon" href="lumina_logo.png" type="image/png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Lumina Interactive - Cutting-Edge Digital Art Technology</title>
+    <link rel="stylesheet" href="fixed_styles.css">
 </head>
 <body>
-    <canvas id="particle-canvas"></canvas>
+    <!-- Particle Background Container -->
+    <div id="particles-js"></div>
 
-    <header class="futuristic-header">
+    <!-- Navigation -->
+    <nav class="navbar">
         <div class="logo-container">
-            <img src="lumina_logo.png" alt="Lumina Interactive Logo" class="futuristic-logo">
-            <span class="logo-text">LUMINA INTERACTIVE</span>
+            <img src="lumina_logo.png" alt="Lumina Interactive Logo" class="logo">
+            <h1 class="brand-name">LUMINA INTERACTIVE</h1>
         </div>
-        <nav class="futuristic-nav">
-            <a href="#hero" class="nav-item active">Home</a>
-            <a href="#products" class="nav-item">Products</a>
-            <a href="#about" class="nav-item">About</a>
-            <a href="#contact" class="nav-item">Contact</a>
-        </nav>
-    </header>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
-    <main id="futuristic-main">
-        <section id="hero" class="futuristic-section hero-section">
-            <div class="hero-content-wrapper">
-                <h1 class="hero-title">Experience the Future of Art</h1>
-                <p class="hero-subtitle">Immersive digital experiences that redefine interaction.</p>
-                <button class="cta-button primary-cta">Explore Innovations</button>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Experience the Future<br>of Art</h1>
+            <p class="hero-subtitle">Immersive digital experiences that redefine interaction.</p>
+            <a href="#products" class="cta-button">Explore Innovations</a>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <h2 class="section-title">Our Creations</h2>
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-visual" id="neural-resonance-visual">
+                    <video class="product-video" muted loop>
+                        <source src="videos/neural_resonance_compressed.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Neural Resonance</h3>
+                    <p class="product-description">Visualize your mind.</p>
+                    <div class="product-actions">
+                        <a href="#" class="action-button discover-btn" data-product="neural-resonance">Discover</a>
+                        <div class="product-tabs">
+                            <button class="tab-button active" data-tab="overview" data-product="neural-resonance">Overview</button>
+                            <button class="tab-button" data-tab="features" data-product="neural-resonance">Features</button>
+                            <button class="tab-button" data-tab="demo" data-product="neural-resonance">Demo Video</button>
+                            <button class="tab-button" data-tab="buy" data-product="neural-resonance">Buy Product</button>
+                        </div>
+                    </div>
+                    <p class="compatibility">
+                        <span class="platform">Windows</span>
+                        <span class="platform">macOS</span>
+                        <span class="platform">Android</span>
+                        <span class="platform">iOS</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-visual" id="quantum-particle-visual">
+                    <video class="product-video" muted loop>
+                        <source src="videos/quantum_particle_compressed.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Quantum Symphony</h3>
+                    <p class="product-description">Conduct the cosmos.</p>
+                    <div class="product-actions">
+                        <a href="#" class="action-button discover-btn" data-product="quantum-particle">Discover</a>
+                        <div class="product-tabs">
+                            <button class="tab-button active" data-tab="overview" data-product="quantum-particle">Overview</button>
+                            <button class="tab-button" data-tab="features" data-product="quantum-particle">Features</button>
+                            <button class="tab-button" data-tab="demo" data-product="quantum-particle">Demo Video</button>
+                            <button class="tab-button" data-tab="buy" data-product="quantum-particle">Buy Product</button>
+                        </div>
+                    </div>
+                    <p class="compatibility">
+                        <span class="platform">Windows</span>
+                        <span class="platform">macOS</span>
+                        <span class="platform">Android</span>
+                        <span class="platform">iOS</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-visual" id="biometric-identity-visual">
+                    <video class="product-video" muted loop>
+                        <source src="videos/biometric_identity_compressed.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Biometric Identity</h3>
+                    <p class="product-description">Living digital portraits.</p>
+                    <div class="product-actions">
+                        <a href="#" class="action-button discover-btn" data-product="biometric-identity">Discover</a>
+                        <div class="product-tabs">
+                            <button class="tab-button active" data-tab="overview" data-product="biometric-identity">Overview</button>
+                            <button class="tab-button" data-tab="features" data-product="biometric-identity">Features</button>
+                            <button class="tab-button" data-tab="demo" data-product="biometric-identity">Demo Video</button>
+                            <button class="tab-button" data-tab="buy" data-product="biometric-identity">Buy Product</button>
+                        </div>
+                    </div>
+                    <p class="compatibility">
+                        <span class="platform">Windows</span>
+                        <span class="platform">macOS</span>
+                        <span class="platform">Android</span>
+                        <span class="platform">iOS</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-visual" id="spatial-memory-visual">
+                    <video class="product-video" muted loop>
+                        <source src="videos/spatial_memory_compressed.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Spatial Memory</h3>
+                    <p class="product-description">Immersive 3D memory structures.</p>
+                    <div class="product-actions">
+                        <a href="#" class="action-button discover-btn" data-product="spatial-memory">Discover</a>
+                        <div class="product-tabs">
+                            <button class="tab-button active" data-tab="overview" data-product="spatial-memory">Overview</button>
+                            <button class="tab-button" data-tab="features" data-product="spatial-memory">Features</button>
+                            <button class="tab-button" data-tab="demo" data-product="spatial-memory">Demo Video</button>
+                            <button class="tab-button" data-tab="buy" data-product="spatial-memory">Buy Product</button>
+                        </div>
+                    </div>
+                    <p class="compatibility">
+                        <span class="platform">Windows</span>
+                        <span class="platform">macOS</span>
+                        <span class="platform">Android</span>
+                        <span class="platform">iOS</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-visual" id="collective-consciousness-visual">
+                    <video class="product-video" muted loop>
+                        <source src="videos/collective_consciousness_compressed.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Collective Consciousness</h3>
+                    <p class="product-description">Connect through shared digital consciousness.</p>
+                    <div class="product-actions">
+                        <a href="#" class="action-button discover-btn" data-product="collective-consciousness">Discover</a>
+                        <div class="product-tabs">
+                            <button class="tab-button active" data-tab="overview" data-product="collective-consciousness">Overview</button>
+                            <button class="tab-button" data-tab="features" data-product="collective-consciousness">Features</button>
+                            <button class="tab-button" data-tab="demo" data-product="collective-consciousness">Demo Video</button>
+                            <button class="tab-button" data-tab="buy" data-product="collective-consciousness">Buy Product</button>
+                        </div>
+                    </div>
+                    <p class="compatibility">
+                        <span class="platform">Windows</span>
+                        <span class="platform">macOS</span>
+                        <span class="platform">Android</span>
+                        <span class="platform">iOS</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Detail Sections -->
+    <div class="product-details">
+        <!-- Neural Resonance Details -->
+        <section id="neural-resonance-details" class="product-detail-section">
+            <div class="tab-content active" data-tab="overview" data-product="neural-resonance">
+                <h3>Neural Resonance Landscapes</h3>
+                <p>Transform your thoughts into breathtaking digital landscapes using military-grade EEG sensors and quantum-enhanced AI algorithms. Neural Resonance creates stunning visual representations of your mental state, allowing you to explore the architecture of your own consciousness.</p>
+                <p>This revolutionary technology bridges neuroscience and digital art, creating a deeply personal experience that evolves with your thoughts. Perfect for meditation, creative exploration, or visualizing complex mental concepts.</p>
+                <p>Our proprietary neural mapping technology offers unparalleled accuracy in translating brainwave patterns into immersive visual environments that respond in real-time to subtle shifts in your cognitive state.</p>
+            </div>
+            <div class="tab-content" data-tab="features" data-product="neural-resonance">
+                <h3>Key Features</h3>
+                <ul>
+                    <li>Military-grade EEG sensor integration</li>
+                    <li>Quantum-enhanced AI algorithms</li>
+                    <li>Real-time neural response mapping</li>
+                    <li>Customizable visual palettes</li>
+                    <li>Emotional state tracking</li>
+                    <li>Meditation enhancement mode</li>
+                    <li>Creative exploration tools</li>
+                    <li>Neural pattern recording and playback</li>
+                </ul>
+            </div>
+            <div class="tab-content" data-tab="demo" data-product="neural-resonance">
+                <h3>Demo Video</h3>
+                <div class="demo-video-container">
+                    <video controls>
+                        <source src="videos/neural_resonance_compressed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+            <div class="tab-content" data-tab="buy" data-product="neural-resonance">
+                <h3>Purchase Options</h3>
+                <div class="pricing-options">
+                    <div class="pricing-toggle">
+                        <span class="toggle-option active">Digital Download</span>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="toggle-option">Physical Package</span>
+                    </div>
+                    <div class="price-card digital active">
+                        <h4>Digital Edition</h4>
+                        <p class="price">$299.99</p>
+                        <ul>
+                            <li>Instant download</li>
+                            <li>Software license for 2 devices</li>
+                            <li>1 year of updates</li>
+                            <li>Basic support package</li>
+                        </ul>
+                        <a href="#" class="buy-button">Buy Now</a>
+                    </div>
+                    <div class="price-card physical">
+                        <h4>Physical Package</h4>
+                        <p class="price">$499.99</p>
+                        <ul>
+                            <li>Premium EEG headset included</li>
+                            <li>Software license for 5 devices</li>
+                            <li>3 years of updates</li>
+                            <li>Priority support package</li>
+                            <li>Exclusive neural pattern library</li>
+                        </ul>
+                        <a href="#" class="buy-button">Buy Now</a>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="products" class="futuristic-section products-section">
-            <h2 class="section-title">Our Creations</h2>
-            <div class="product-grid-futuristic">
-                <!-- Product cards will be dynamically inserted here or hardcoded for prototype -->
-                <div class="product-card-futuristic">
-                    <div class="product-card-visual"></div>
-                    <h3 class="product-title-futuristic">Neural Resonance</h3>
-                    <p class="product-desc-futuristic">Visualize your mind.</p>
-                    <button class="cta-button secondary-cta">Discover</button>
-                </div>
-                 <div class="product-card-futuristic">
-                    <div class="product-card-visual"></div>
-                    <h3 class="product-title-futuristic">Quantum Symphony</h3>
-                    <p class="product-desc-futuristic">Conduct the cosmos.</p>
-                    <button class="cta-button secondary-cta">Discover</button>
-                </div>
+        <!-- Quantum Particle Details -->
+        <section id="quantum-particle-details" class="product-detail-section">
+            <!-- Similar structure as above for Quantum Particle Symphony -->
+            <div class="tab-content active" data-tab="overview" data-product="quantum-particle">
+                <h3>Quantum Particle Symphony</h3>
+                <p>Conduct the cosmos through an interactive quantum particle system that responds to your movements. This groundbreaking technology simulates quantum field behavior with unprecedented accuracy, allowing you to manipulate subatomic particles with simple gestures.</p>
+                <p>Create mesmerizing visual and audio compositions as particles interact according to quantum mechanical principles. Perfect for artists, educators, and anyone fascinated by the fundamental building blocks of our universe.</p>
+                <p>Our proprietary quantum simulation engine renders particle behavior with scientific accuracy while maintaining an intuitive interface that makes quantum physics accessible to everyone.</p>
             </div>
+            <!-- Additional tabs similar to Neural Resonance -->
         </section>
 
-    </main>
+        <!-- Additional product detail sections -->
+    </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="futuristic_script.js"></script>
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="about-content">
+            <div class="about-text">
+                <h2 class="section-title">About Lumina</h2>
+                <p>Lumina Interactive stands at the intersection of cutting-edge technology and digital artistry. Founded by a team of scientists, artists, and engineers, we create immersive experiences that push the boundaries of what's possible.</p>
+                <p>Our mission is to transform how humans interact with technology, making complex scientific concepts accessible through beautiful, intuitive interfaces.</p>
+                <p>Each of our products represents years of research and development, combining principles from quantum physics, neuroscience, and advanced visualization techniques to create experiences that are both scientifically accurate and aesthetically stunning.</p>
+            </div>
+            <div class="about-image">
+                <img src="lumina_logo.png" alt="Lumina Interactive Logo" class="about-logo">
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2 class="section-title">Contact Us</h2>
+        <div class="contact-container">
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-button">Send Message</button>
+            </form>
+            <div class="contact-info">
+                <div class="info-item">
+                    <span class="info-icon">📧</span>
+                    <p>info@luminainteractive.com</p>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📱</span>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <p>123 Innovation Way, Tech City, TC 98765</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="lumina_logo.png" alt="Lumina Interactive Logo" class="footer-logo-img">
+                <p>LUMINA INTERACTIVE</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Products</h4>
+                    <ul>
+                        <li><a href="#">Neural Resonance</a></li>
+                        <li><a href="#">Quantum Symphony</a></li>
+                        <li><a href="#">Biometric Identity</a></li>
+                        <li><a href="#">Spatial Memory</a></li>
+                        <li><a href="#">Collective Consciousness</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Lumina Interactive. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="fixed_script.js"></script>
 </body>
 </html>
