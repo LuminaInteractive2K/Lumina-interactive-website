@@ -5,26 +5,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize particle background
     initParticles();
     
-    // Initialize quantum cursor
-    initQuantumCursor();
+    // Play videos when they come into view
+    initVideoPlayback();
     
-    // Initialize product videos
-    initProductVideos();
+    // Initialize product interactions
+    initProductInteractions();
     
     // Initialize tab system
-    initTabs();
+    initTabSystem();
     
     // Initialize pricing toggle
     initPricingToggle();
     
-    // Add scroll animations
-    initScrollAnimations();
-    
-    // Initialize navigation highlighting
-    initNavHighlighting();
+    // Initialize form validation
+    initFormValidation();
 });
 
-// Initialize particles.js background
+// Initialize particle.js background
 function initParticles() {
     if (typeof particlesJS !== 'undefined') {
         particlesJS('particles-js', {
@@ -51,9 +48,9 @@ function initParticles() {
                 },
                 "opacity": {
                     "value": 0.5,
-                    "random": true,
+                    "random": false,
                     "anim": {
-                        "enable": true,
+                        "enable": false,
                         "speed": 1,
                         "opacity_min": 0.1,
                         "sync": false
@@ -63,8 +60,8 @@ function initParticles() {
                     "value": 3,
                     "random": true,
                     "anim": {
-                        "enable": true,
-                        "speed": 2,
+                        "enable": false,
+                        "speed": 40,
                         "size_min": 0.1,
                         "sync": false
                     }
@@ -78,14 +75,14 @@ function initParticles() {
                 },
                 "move": {
                     "enable": true,
-                    "speed": 1,
+                    "speed": 2,
                     "direction": "none",
-                    "random": true,
+                    "random": false,
                     "straight": false,
                     "out_mode": "out",
                     "bounce": false,
                     "attract": {
-                        "enable": true,
+                        "enable": false,
                         "rotateX": 600,
                         "rotateY": 1200
                     }
@@ -132,81 +129,116 @@ function initParticles() {
             },
             "retina_detect": true
         });
-    } else {
-        console.warn('particles.js not loaded');
-        // Fallback to simple CSS background
-        document.body.classList.add('fallback-bg');
     }
 }
 
-// Initialize quantum cursor effect
-function initQuantumCursor() {
-    const cursor = document.createElement('div');
-    cursor.classList.add('quantum-cursor');
+// Play videos when they come into view
+function initVideoPlayback() {
+    const videos = document.querySelectorAll('.product-video');
     
-    const follower = document.createElement('div');
-    follower.classList.add('quantum-cursor-follower');
-    
-    document.body.appendChild(cursor);
-    document.body.appendChild(follower);
-    
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-        
-        setTimeout(() => {
-            follower.style.left = e.clientX + 'px';
-            follower.style.top = e.clientY + 'px';
-        }, 100);
-    });
-    
-    // Change cursor size on interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, input, textarea, .product-card');
-    
-    interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-            follower.style.transform = 'translate(-50%, -50%) scale(1.5)';
-            follower.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-        });
-        
-        el.addEventListener('mouseleave', () => {
-            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-            follower.style.transform = 'translate(-50%, -50%) scale(1)';
-            follower.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+    // Play all videos initially
+    videos.forEach(video => {
+        video.play().catch(e => {
+            console.log('Auto-play prevented:', e);
+            // Add play button or other fallback if needed
         });
     });
-}
-
-// Initialize product videos
-function initProductVideos() {
-    const productVideos = document.querySelectorAll('.product-video');
     
-    productVideos.forEach(video => {
-        // Play videos when they come into view
-        const observer = new IntersectionObserver((entries) => {
+    // Add intersection observer to play/pause videos based on visibility
+    if ('IntersectionObserver' in window) {
+        const videoObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    video.play();
+                    entry.target.play().catch(e => console.log('Play error:', e));
                 } else {
-                    video.pause();
+                    entry.target.pause();
                 }
             });
         }, { threshold: 0.5 });
         
-        observer.observe(video);
-        
-        // Add hover effect
-        const productCard = video.closest('.product-card');
-        if (productCard) {
-            productCard.addEventListener('mouseenter', () => {
-                video.play();
-            });
+        videos.forEach(video => {
+            videoObserver.observe(video);
+        });
+    }
+}
+
+// Initialize product interactions
+function initProductInteractions() {
+    // Handle discover button clicks
+    const discoverButtons = document.querySelectorAll('.discover-btn');
+    const productDetailSections = document.querySelectorAll('.product-detail-section');
+    const closeButtons = document.querySelectorAll('.close-detail');
+    
+    discoverButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.getAttribute('data-product');
+            const detailSection = document.getElementById(`${productId}-details`);
             
-            productCard.addEventListener('mouseleave', () => {
-                // Only pause if not in viewport
-                if (!isElementInViewport(video)) {
-                    video.pause();
+            if (detailSection) {
+                // Hide all detail sections first
+                productDetailSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show the selected detail section
+                detailSection.classList.add('active');
+                
+                // Prevent body scrolling
+                document.body.style.overflow = 'hidden';
+                
+                // Ensure the demo tab is active for all products
+                const demoTab = detailSection.querySelector('[data-tab="demo"]');
+                if (demoTab) {
+                    // First deactivate all tabs
+                    const allTabs = detailSection.querySelectorAll('.tab-button');
+                    allTabs.forEach(tab => tab.classList.remove('active'));
+                    
+                    // Then activate the demo tab
+                    demoTab.classList.add('active');
+                    
+                    // Show the demo content
+                    const allContents = detailSection.querySelectorAll('.tab-content');
+                    allContents.forEach(content => content.classList.remove('active'));
+                    
+                    const demoContent = detailSection.querySelector(`.tab-content[data-tab="demo"][data-product="${productId}"]`);
+                    if (demoContent) {
+                        demoContent.classList.add('active');
+                    }
+                }
+            }
+        });
+    });
+    
+    // Handle close button clicks
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const detailSection = this.closest('.product-detail-section');
+            if (detailSection) {
+                detailSection.classList.remove('active');
+                // Restore body scrolling
+                document.body.style.overflow = 'auto';
+            }
+        });
+    });
+    
+    // Close detail section when clicking outside content
+    productDetailSections.forEach(section => {
+        section.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    });
+    
+    // Handle escape key to close detail sections
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            productDetailSections.forEach(section => {
+                if (section.classList.contains('active')) {
+                    section.classList.remove('active');
+                    document.body.style.overflow = 'auto';
                 }
             });
         }
@@ -214,54 +246,32 @@ function initProductVideos() {
 }
 
 // Initialize tab system
-function initTabs() {
+function initTabSystem() {
     const tabButtons = document.querySelectorAll('.tab-button');
-    const productDetails = document.querySelectorAll('.product-detail-section');
-    const discoverButtons = document.querySelectorAll('.discover-btn');
     
-    // Handle tab switching
     tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const product = button.getAttribute('data-product');
-            const tab = button.getAttribute('data-tab');
+        button.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+            const productId = this.getAttribute('data-product');
+            const detailSection = this.closest('.product-detail-section');
             
-            // Deactivate all tabs for this product
-            document.querySelectorAll(`.tab-button[data-product="${product}"]`).forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Activate clicked tab
-            button.classList.add('active');
-            
-            // Hide all tab content for this product
-            document.querySelectorAll(`.tab-content[data-product="${product}"]`).forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Show selected tab content
-            document.querySelector(`.tab-content[data-product="${product}"][data-tab="${tab}"]`).classList.add('active');
-        });
-    });
-    
-    // Handle discover button clicks
-    discoverButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            const product = button.getAttribute('data-product');
-            const detailSection = document.getElementById(`${product}-details`);
-            
-            // Hide all product detail sections
-            productDetails.forEach(section => {
-                section.style.display = 'none';
-            });
-            
-            // Show selected product detail section
             if (detailSection) {
-                detailSection.style.display = 'block';
+                // Deactivate all tabs in this section
+                const allTabs = detailSection.querySelectorAll('.tab-button');
+                allTabs.forEach(tab => tab.classList.remove('active'));
                 
-                // Scroll to detail section
-                detailSection.scrollIntoView({ behavior: 'smooth' });
+                // Activate this tab
+                this.classList.add('active');
+                
+                // Hide all content in this section
+                const allContents = detailSection.querySelectorAll('.tab-content');
+                allContents.forEach(content => content.classList.remove('active'));
+                
+                // Show the selected content
+                const selectedContent = detailSection.querySelector(`.tab-content[data-tab="${tabName}"][data-product="${productId}"]`);
+                if (selectedContent) {
+                    selectedContent.classList.add('active');
+                }
             }
         });
     });
@@ -269,86 +279,135 @@ function initTabs() {
 
 // Initialize pricing toggle
 function initPricingToggle() {
-    const pricingToggles = document.querySelectorAll('.pricing-toggle input');
+    const toggleSwitches = document.querySelectorAll('.pricing-toggle input[type="checkbox"]');
     
-    pricingToggles.forEach(toggle => {
-        toggle.addEventListener('change', () => {
-            const parent = toggle.closest('.pricing-options');
-            const digitalCard = parent.querySelector('.price-card.digital');
-            const physicalCard = parent.querySelector('.price-card.physical');
-            const digitalOption = parent.querySelector('.toggle-option:first-child');
-            const physicalOption = parent.querySelector('.toggle-option:last-child');
+    toggleSwitches.forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            const pricingContainer = this.closest('.pricing-options');
             
-            if (toggle.checked) {
-                // Physical selected
-                digitalCard.classList.remove('active');
-                physicalCard.classList.add('active');
-                digitalOption.classList.remove('active');
-                physicalOption.classList.add('active');
-            } else {
-                // Digital selected
-                digitalCard.classList.add('active');
-                physicalCard.classList.remove('active');
-                digitalOption.classList.add('active');
-                physicalOption.classList.remove('active');
+            if (pricingContainer) {
+                const digitalCard = pricingContainer.querySelector('.price-card.digital');
+                const physicalCard = pricingContainer.querySelector('.price-card.physical');
+                const digitalOption = pricingContainer.querySelector('.toggle-option:first-child');
+                const physicalOption = pricingContainer.querySelector('.toggle-option:last-child');
+                
+                if (this.checked) {
+                    // Show physical, hide digital
+                    if (digitalCard) digitalCard.classList.remove('active');
+                    if (physicalCard) physicalCard.classList.add('active');
+                    if (digitalOption) digitalOption.classList.remove('active');
+                    if (physicalOption) physicalOption.classList.add('active');
+                } else {
+                    // Show digital, hide physical
+                    if (digitalCard) digitalCard.classList.add('active');
+                    if (physicalCard) physicalCard.classList.remove('active');
+                    if (digitalOption) digitalOption.classList.add('active');
+                    if (physicalOption) physicalOption.classList.remove('active');
+                }
             }
         });
     });
 }
 
-// Initialize scroll animations
-function initScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.product-card, .section-title, .about-content > *, .contact-form, .contact-info');
+// Initialize form validation
+function initFormValidation() {
+    const contactForm = document.querySelector('.contact-form');
     
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animated');
-                observer.unobserve(entry.target);
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simple validation
+            let valid = true;
+            const inputs = this.querySelectorAll('input, textarea');
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    valid = false;
+                    input.style.borderColor = 'red';
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+            
+            if (valid) {
+                // Simulate form submission
+                const submitButton = this.querySelector('.submit-button');
+                if (submitButton) {
+                    const originalText = submitButton.textContent;
+                    submitButton.textContent = 'Sending...';
+                    submitButton.disabled = true;
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        submitButton.textContent = 'Message Sent!';
+                        this.reset();
+                        
+                        // Reset button after delay
+                        setTimeout(() => {
+                            submitButton.textContent = originalText;
+                            submitButton.disabled = false;
+                        }, 3000);
+                    }, 1500);
+                }
             }
         });
-    }, { threshold: 0.2 });
-    
-    animatedElements.forEach(el => {
-        observer.observe(el);
-    });
+    }
 }
 
-// Initialize navigation highlighting
-function initNavHighlighting() {
+// Add smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        if (targetId !== '#') {
+            e.preventDefault();
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80, // Adjust for fixed header
+                    behavior: 'smooth'
+                });
+            }
+        }
+    });
+});
+
+// Add active class to nav links based on scroll position
+window.addEventListener('scroll', function() {
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links a');
     
-    window.addEventListener('scroll', () => {
-        let current = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
-                current = section.getAttribute('id');
-            }
-        });
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href').substring(1) === current) {
-                link.classList.add('active');
-            }
-        });
-    });
-}
-
-// Helper function to check if element is in viewport
-function isElementInViewport(el) {
-    const rect = el.getBoundingClientRect();
+    let currentSection = '';
     
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-}
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+            currentSection = section.getAttribute('id');
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSection}`) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// Add cursor effects
+document.addEventListener('mousemove', function(e) {
+    const cursor = document.createElement('div');
+    cursor.classList.add('cursor-trail');
+    cursor.style.left = e.pageX + 'px';
+    cursor.style.top = e.pageY + 'px';
+    
+    document.body.appendChild(cursor);
+    
+    setTimeout(() => {
+        cursor.remove();
+    }, 1000);
+});
+
 
