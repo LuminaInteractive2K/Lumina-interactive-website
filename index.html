@@ -3,243 +3,883 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Interactive - Cutting-Edge Digital Art Technology</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Particles.js for interactive background -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <title>Lumina Interactive | Digital Art Innovation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00f7ff;
+            --secondary: #9d4edd;
+            --accent: #ff00aa;
+            --dark: #0a0a1a;
+            --darker: #050510;
+            --light: #e0e0ff;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* Particle background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 26, 0.7);
+            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 1rem 5%;
+            background: rgba(5, 5, 16, 0.95);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--darker);
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.5);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 247, 255, 0.8);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 650px;
+            z-index: 10;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--light), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            color: rgba(224, 224, 255, 0.9);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .outline-button {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .outline-button:hover {
+            background: rgba(0, 247, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.4);
+        }
+
+        /* Floating Shapes */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.6;
+        }
+
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: 20%;
+            right: 10%;
+        }
+
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--secondary);
+            top: 50%;
+            right: 25%;
+        }
+
+        .shape-3 {
+            width: 250px;
+            height: 250px;
+            background: var(--accent);
+            bottom: 20%;
+            right: 15%;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 8rem 5%;
+            background: rgba(5, 5, 16, 0.5);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-title h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: rgba(224, 224, 255, 0.8);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: rgba(20, 20, 40, 0.6);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(157, 78, 221, 0.4);
+            border-color: rgba(157, 78, 221, 0.6);
+        }
+
+        .product-image {
+            height: 250px;
+            background: linear-gradient(45deg, var(--darker), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image .icon {
+            font-size: 6rem;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .product-info {
+            padding: 2rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .product-info p {
+            margin-bottom: 1.5rem;
+            color: rgba(224, 224, 255, 0.8);
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .product-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .product-features li::before {
+            content: '✓';
+            color: var(--primary);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Interactive Canvas */
+        .interactive-canvas {
+            position: relative;
+            height: 500px;
+            background: rgba(0, 0, 0, 0.2);
+            margin: 8rem 0;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+        }
+
+        #art-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .canvas-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(5, 5, 16, 0.5);
+            z-index: 20;
+        }
+
+        .canvas-overlay h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .canvas-overlay p {
+            max-width: 700px;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 5rem 5% 2rem;
+            background: rgba(5, 5, 16, 0.9);
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+        }
+
+        .footer-column h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .footer-column p, .footer-column a {
+            color: rgba(224, 224, 255, 0.7);
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(224, 224, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: var(--darker);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(224, 224, 255, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero {
+                padding: 0 5%;
+            }
+            
+            .floating-shapes {
+                width: 40%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                text-align: center;
+            }
+            
+            .hero-content {
+                margin: 0 auto;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .floating-shapes {
+                display: none;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .shape {
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape-1 {
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            animation-delay: 2s;
+        }
+
+        .shape-3 {
+            animation-delay: 4s;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+
     <!-- Header -->
     <header>
-        <div class="container">
-            <div class="header-content">
-                <img src="lumina_logo.png" alt="Lumina Interactive Logo" class="logo">
-                <nav class="nav-links">
-                    <a href="#home">Home</a>
-                    <a href="#products">Products</a>
-                    <a href="#about">About</a>
-                    <a href="#contact">Contact</a>
-                </nav>
-            </div>
-        </div>
+        <a href="#" class="logo">LUMINA</a>
+        <nav class="nav-links">
+            <a href="#">Home</a>
+            <a href="#products">Products</a>
+            <a href="#">Gallery</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+        <button class="cta-button">Get Started</button>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div id="particles-js"></div>
-        <div class="container">
-            <div class="hero-content">
-                <h1>Transform Your Digital Experience</h1>
-                <p>Discover cutting-edge interactive art technology that responds to your unique biometric signature, creating personalized digital experiences unlike anything you've seen before.</p>
-                <a href="#products" class="cta-button">Explore Our Products</a>
+    <section class="hero">
+        <div class="hero-content fade-in">
+            <h1>Redefining Digital Art Through Innovation</h1>
+            <p>Lumina Interactive creates boundary-pushing digital experiences that merge technology and artistry to transform how we interact with creative expression.</p>
+            <div class="hero-buttons">
+                <button class="cta-button">Explore Collection</button>
+                <button class="outline-button">View Demo</button>
             </div>
+        </div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
         </div>
     </section>
 
     <!-- Products Section -->
-    <section id="products" class="container">
-        <div class="product-section">
-            <div class="product-card" id="neural-resonance">
+    <section id="products" class="products">
+        <div class="section-title fade-in">
+            <h2>Featured Innovations</h2>
+            <p>Explore our revolutionary digital art platforms that merge cutting-edge technology with breathtaking creativity.</p>
+        </div>
+        <div class="product-grid">
+            <div class="product-card fade-in">
                 <div class="product-image">
-                    <video class="product-video" autoplay loop muted>
-                        <source src="neural_resonance_clip1.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                    <i class="fas fa-atom icon"></i>
                 </div>
                 <div class="product-info">
-                    <h3>Neural Resonance</h3>
-                    <p>Experience music through brainwave synchronization. This revolutionary technology adapts to your neural patterns in real-time.</p>
-                    <div class="product-buttons">
-                        <button class="discover-btn" onclick="showProductDetails('neural-resonance')">Discover</button>
-                    </div>
+                    <h3>Quantum Canvas</h3>
+                    <p>An AI-powered art platform that evolves in real-time based on viewer interaction and environmental data.</p>
+                    <ul class="product-features">
+                        <li>Real-time generative art algorithms</li>
+                        <li>Multi-sensory feedback integration</li>
+                        <li>Blockchain-based ownership</li>
+                        <li>Infinite unique creations</li>
+                    </ul>
+                    <div class="price">$2,499</div>
+                    <button class="outline-button">Learn More</button>
                 </div>
             </div>
-
-            <div class="product-card" id="quantum-symphony">
+            
+            <div class="product-card fade-in">
                 <div class="product-image">
-                    <video class="product-video" autoplay loop muted>
-                        <source src="quantum_symphony_clip1.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                    <i class="fas fa-vr-cardboard icon"></i>
                 </div>
                 <div class="product-info">
-                    <h3>Quantum Symphony</h3>
-                    <p>Generate music from quantum fluctuations. Each composition is unique and can never be replicated.</p>
-                    <div class="product-buttons">
-                        <button class="discover-btn" onclick="showProductDetails('quantum-symphony')">Discover</button>
-                    </div>
+                    <h3>HoloMatrix</h3>
+                    <p>Immersive holographic display system that transforms any space into a dynamic art environment.</p>
+                    <ul class="product-features">
+                        <li>360° holographic projection</li>
+                        <li>Gesture-based interaction</li>
+                        <li>Spatial audio integration</li>
+                        <li>Customizable environments</li>
+                    </ul>
+                    <div class="price">$3,999</div>
+                    <button class="outline-button">Learn More</button>
                 </div>
             </div>
-
-            <div class="product-card" id="biometric-identity">
+            
+            <div class="product-card fade-in">
                 <div class="product-image">
-                    <video class="product-video" autoplay loop muted>
-                        <source src="biometric_identity_clip1.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                    <i class="fas fa-brain icon"></i>
                 </div>
                 <div class="product-info">
-                    <h3>Biometric Identity</h3>
-                    <p>Transform your biometric data into stunning visual art. Your heartbeat becomes a masterpiece.</p>
-                    <div class="product-buttons">
-                        <button class="discover-btn" onclick="showProductDetails('biometric-identity')">Discover</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" id="spatial-memory">
-                <div class="product-image">
-                    <video class="product-video" autoplay loop muted>
-                        <source src="spatial_memory_clip1.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-                <div class="product-info">
-                    <h3>Spatial Memory</h3>
-                    <p>Store and retrieve memories in 3D space. Navigate your personal history like never before.</p>
-                    <div class="product-buttons">
-                        <button class="discover-btn" onclick="showProductDetails('spatial-memory')">Discover</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" id="collective-consciousness">
-                <div class="product-image">
-                    <video class="product-video" autoplay loop muted>
-                        <source src="collective_consciousness_clip1.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-                <div class="product-info">
-                    <h3>Collective Consciousness</h3>
-                    <p>Connect with others in a shared digital space. Create collaborative art across continents.</p>
-                    <div class="product-buttons">
-                        <button class="discover-btn" onclick="showProductDetails('collective-consciousness')">Discover</button>
-                    </div>
+                    <h3>NeuroSync</h3>
+                    <p>Brainwave-responsive art installation that visualizes neural patterns in stunning light displays.</p>
+                    <ul class="product-features">
+                        <li>EEG-based interaction</li>
+                        <li>Emotional state visualization</li>
+                        <li>Meditation enhancement mode</li>
+                        <li>Personalized art generation</li>
+                    </ul>
+                    <div class="price">$1,899</div>
+                    <button class="outline-button">Learn More</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Product Modal -->
-    <div id="product-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            
-            <div class="modal-tabs">
-                <button class="tab-btn active" data-tab="overview">Overview</button>
-                <button class="tab-btn" data-tab="features">Features</button>
-                <button class="tab-btn" data-tab="demo">Demo Video</button>
-                <button class="tab-btn" data-tab="buy">Buy Product</button>
-            </div>
-            
-            <div class="tab-content">
-                <div id="overview" class="tab-pane active">
-                    <h2 class="product-title">Product Name</h2>
-                    <p class="product-description">Detailed product description will appear here.</p>
-                </div>
-                
-                <div id="features" class="tab-pane">
-                    <h2>Key Features</h2>
-                    <ul class="feature-list">
-                        <!-- Features will be dynamically populated -->
-                    </ul>
-                </div>
-                
-                <div id="demo" class="tab-pane">
-                    <h2>Demo Video</h2>
-                    <div class="demo-video-container">
-                        <video id="demo-video" controls>
-                            <source src="" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                </div>
-                
-                <div id="buy" class="tab-pane">
-                    <h2>Select Your Package</h2>
-                    <div class="pricing-options">
-                        <div class="pricing-tier" data-tier="basic">
-                            <h3>Basic</h3>
-                            <p class="price">$299</p>
-                            <ul>
-                                <li>Core functionality</li>
-                                <li>1 year of updates</li>
-                                <li>Standard support</li>
-                            </ul>
-                            <button class="buy-now-btn" onclick="selectPricing('basic')">Select</button>
-                        </div>
-                        
-                        <div class="pricing-tier" data-tier="pro">
-                            <h3>Professional</h3>
-                            <p class="price">$499</p>
-                            <ul>
-                                <li>All Basic features</li>
-                                <li>Advanced customization</li>
-                                <li>2 years of updates</li>
-                                <li>Priority support</li>
-                            </ul>
-                            <button class="buy-now-btn" onclick="selectPricing('pro')">Select</button>
-                        </div>
-                        
-                        <div class="pricing-tier featured" data-tier="enterprise">
-                            <h3>Enterprise</h3>
-                            <p class="price">$999</p>
-                            <ul>
-                                <li>All Professional features</li>
-                                <li>Unlimited devices</li>
-                                <li>Lifetime updates</li>
-                                <li>24/7 dedicated support</li>
-                                <li>Custom integration</li>
-                            </ul>
-                            <button class="buy-now-btn" onclick="selectPricing('enterprise')">Select</button>
-                        </div>
-                    </div>
-                    
-                    <div class="device-compatibility">
-                        <h3>Device Compatibility</h3>
-                        <div class="device-options">
-                            <label>
-                                <input type="checkbox" name="device" value="windows"> Windows
-                            </label>
-                            <label>
-                                <input type="checkbox" name="device" value="mac"> Mac
-                            </label>
-                            <label>
-                                <input type="checkbox" name="device" value="ios"> iOS
-                            </label>
-                            <label>
-                                <input type="checkbox" name="device" value="android"> Android
-                            </label>
-                            <label>
-                                <input type="checkbox" name="device" value="linux"> Linux
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Interactive Canvas -->
+    <div class="interactive-canvas">
+        <canvas id="art-canvas"></canvas>
+        <div class="canvas-overlay fade-in">
+            <h3>Experience Interactive Art</h3>
+            <p>Move your cursor to influence this generative artwork. Our technology transforms simple interactions into complex visual symphonies.</p>
+            <button class="cta-button">Create Your Own</button>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="site-footer">
+    <footer>
         <div class="footer-content">
-            <div class="footer-logo">
-                <img src="lumina_logo.png" alt="Lumina Interactive Logo" class="footer-logo-img">
+            <div class="footer-column">
+                <h4>LUMINA INTERACTIVE</h4>
+                <p>Pioneering the future of digital art through innovative technology and creative vision.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
             </div>
-            <div class="footer-contact">
-                <p>Contact: <a href="mailto:sultan@luminainteractive.net">sultan@luminainteractive.net</a></p>
+            <div class="footer-column">
+                <h4>Products</h4>
+                <a href="#">Quantum Canvas</a>
+                <a href="#">HoloMatrix</a>
+                <a href="#">NeuroSync</a>
+                <a href="#">Prism Portal</a>
+                <a href="#">ChronoScape</a>
             </div>
-            <div class="footer-links">
-                <a href="#about">About</a>
-                <a href="#privacy">Privacy Policy</a>
-                <a href="#terms">Terms of Service</a>
+            <div class="footer-column">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Our Vision</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="#">Contact</a>
             </div>
+            <div class="footer-column">
+                <h4>Newsletter</h4>
+                <p>Subscribe for exclusive content, product updates, and artistic inspiration.</p>
+                <form>
+                    <input type="email" placeholder="Your Email" style="width:100%; padding:12px; margin-bottom:15px; border-radius:50px; border:none; background:rgba(255,255,255,0.1); color:white;">
+                    <button class="cta-button" style="width:100%">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Lumina Interactive. All rights reserved. Redefining digital art experiences.</p>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="products.js"></script>
-    <script src="scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Particles.js initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#00f7ff" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#9d4edd",
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "repulse" },
+                        onclick: { enable: true, mode: "push" },
+                        resize: true
+                    }
+                },
+                retina_detect: true
+            });
+            
+            // Fade-in animation on scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('appear');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+            
+            // Header scroll effect
+            window.addEventListener('scroll', () => {
+                const header = document.querySelector('header');
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Interactive Canvas
+            const canvas = document.getElementById('art-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            function resizeCanvas() {
+                const container = canvas.parentElement;
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Canvas animation variables
+            let particles = [];
+            const particleCount = 100;
+            
+            // Particle class
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+                
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 2;
+                    this.vy = (Math.random() - 0.5) * 2;
+                    this.radius = Math.random() * 3 + 1;
+                    this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                    this.alpha = Math.random() * 0.5 + 0.1;
+                }
+                
+                update(mouse) {
+                    // Move particle
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    // Mouse interaction
+                    if (mouse.x && mouse.y) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            const force = (100 - distance) / 100;
+                            this.vx -= dx * force * 0.05;
+                            this.vy -= dy * force * 0.05;
+                        }
+                    }
+                    
+                    // Bounce off edges
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                    
+                    // Fade out if too fast
+                    const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                    this.alpha = Math.min(0.8, 0.1 + speed * 0.1);
+                }
+                
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fill();
+                }
+            }
+            
+            // Create particles
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+            
+            // Mouse position
+            const mouse = { x: null, y: null };
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+            
+            canvas.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+            
+            // Animation loop
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw glowing connections
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(157, 78, 221, ${0.2 * (1 - distance/100)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.globalAlpha = 0.3 * (1 - distance/100);
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                
+                // Update and draw particles
+                particles.forEach(particle => {
+                    particle.update(mouse);
+                    particle.draw();
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        });
+    </script>
 </body>
 </html>
